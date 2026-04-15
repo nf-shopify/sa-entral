@@ -53,24 +53,13 @@ npm i -g @shopify/quick
 quick deploy . sa-entral
 ```
 
-### Drag & Drop
-1. Go to [quick.shopify.io](https://quick.shopify.io/)
-2. Drag the `sa-entral-quick-site/` folder contents onto the drop zone
-3. Set subdomain to `sa-entral`
-
-Site goes live at `sa-entral.quick.shopify.io` (Google auth, Shopify employees only).
-
 ## Design
 
-- Dark theme inspired by [jb-resumev1.quick.shopify.io](https://jb-resumev1.quick.shopify.io/)
 - Shopify green (`#00C853`) accent on near-black (`#0B0F0D`)
 - CSS grid background pattern, scroll-reveal animations, count-up stats
 - Fully responsive (laptop + mobile)
 - Zero dependencies — vanilla HTML/CSS/JS, no build step
 
-## Source
-
-Inspired by the [Working with Solutions Architects](https://docs.google.com/presentation/d/17yJhuugog3MWpYS04qrjPDV5Ck36sSzqzmxLqfizoCg) deck (Salim Odero, 2025).
 
 ## Team
 
