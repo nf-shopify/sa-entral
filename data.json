@@ -1,0 +1,223 @@
+{
+  "hero": {
+    "badge": "Enterprise Solutions Architecture \u00b7 Shopify",
+    "title": "Working with",
+    "titleEmphasis": "Solutions Architects.",
+    "subtitle": "Your technical partner on the deals that matter most",
+    "description": "Solutions Architects are the technical backbone of Shopify\u2019s Enterprise and Large account motion \u2014 globally. We work alongside SEs, AEs, and merchants to architect solutions for the most complex deals, remove technical blockers, and turn ambiguity into a clear path forward. We also serve as Revenue\u2019s bridge to Product \u2014 feeding real merchant needs back into the platform \u2014 and bring subject matter expertise to conferences, executive dinners, and anywhere a technical voice moves the needle."
+  },
+  "stats": [
+    { "value": "6", "label": "Technical Disciplines" },
+    { "value": "11", "label": "Solutions Architects" },
+    { "value": "2", "label": "Segments \u00b7 Enterprise + Large" },
+    { "value": "\ud83c\udf0d", "label": "Global Coverage", "isEmoji": true },
+    { "value": "\u221e", "label": "Complex Deals Supported", "isSymbol": true }
+  ],
+  "valuePillars": [
+    {
+      "icon": "\ud83e\udde0",
+      "title": "Subject Matter Experts",
+      "description": "Deep technical insight aligned to subject matter expertise to assist solutioning efforts across the deal lifecycle."
+    },
+    {
+      "icon": "\ud83c\udfaf",
+      "title": "Strategic Engagement",
+      "description": "Deal strategy and relationship alignment with key technical stakeholders at the enterprise level."
+    },
+    {
+      "icon": "\ud83d\udcda",
+      "title": "Best Practices",
+      "description": "Curating brand and internally facing technical assets that highlight best practices and up-skill audiences."
+    },
+    {
+      "icon": "\ud83e\udd1d",
+      "title": "Product Bridge",
+      "description": "Fostering strong relationships with internal teams to provide product direction influencing perspectives."
+    }
+  ],
+  "disciplines": [
+    {
+      "icon": "\ud83c\udf10",
+      "name": "Storefronts",
+      "description": "Liquid, Headless, Hydrogen, dev workflows, web performance, multi-storefront",
+      "members": [
+        { "name": "Aubrey T.", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/h2maii79chexf6i1um4t1xq7rf7i.jpg", "location": "NORAM \u00b7 Pacific" },
+        { "name": "Sean O.", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/pn38m8zpetj2ib8v81uajf2pmg64.jpg", "location": "NORAM \u00b7 Pacific" },
+        { "name": "Simon F.", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/j5ohl6t32red3a6rbxjonzbmkc0f.webp", "location": "EMEA \u00b7 Dublin" }
+      ]
+    },
+    {
+      "icon": "\ud83e\udde9",
+      "name": "Checkout & Extensibility",
+      "description": "Checkout extensibility & customization, functions, custom data",
+      "members": [
+        { "name": "Sean O.", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/pn38m8zpetj2ib8v81uajf2pmg64.jpg", "location": "NORAM \u00b7 Pacific" },
+        { "name": "Christian Mackie", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/plvemmt3hjwpyag2b2u920fagz3a.webp", "location": "EMEA \u00b7 London" }
+      ]
+    },
+    {
+      "icon": "\ud83d\uded2",
+      "name": "Retail",
+      "description": "Point-of-sale, hardware, order management, fulfillment",
+      "members": [
+        { "name": "Jeannine M.", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/no8f1dp15fr9mb24sk2axzcy740t.webp", "location": "NORAM \u00b7 Eastern" },
+        { "name": "Richad A.", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/jc0knvvr8m66fa1ndf6vuaspojj1.webp", "location": "NORAM \u00b7 Eastern (CA)" },
+        { "name": "Peter W.", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/x2f8vud8hjwdzrj51dqietwbw1l1.webp", "location": "EMEA \u00b7 London" }
+      ]
+    },
+    {
+      "icon": "\ud83d\udcb3",
+      "name": "Payments",
+      "description": "SPCC, PLCC, payment provider platform, subscriptions, bundles, discount structures",
+      "members": [
+        { "name": "Christian M.", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/glthbs5a7guygutaxmrh3kjt4ix9.webp", "location": "NORAM \u00b7 Central" },
+        { "name": "Ryan P.", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/bwdqqaw4bh9kiv6jznuv6blbg7z8.webp", "location": "NORAM \u00b7 Eastern (CA)" },
+        { "name": "Pablo R.G.", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/k6ayskgtz7fnterw4mvtg1ofu2ee.jpg", "location": "EMEA \u00b7 London" }
+      ]
+    },
+    {
+      "icon": "\ud83d\udda7",
+      "name": "Security & Infrastructure",
+      "description": "Enterprise security, scale and resiliency, edge networks",
+      "members": [
+        { "name": "Mike W.", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/pnpnhqtfph1eo5iyzkfuvk9z79ws.webp", "location": "EMEA \u00b7 London" }
+      ]
+    },
+    {
+      "icon": "\ud83e\udd16",
+      "name": "AI",
+      "description": "Agentic commerce, AI-native storefronts, Sidekick, Shop AI, MCP servers, AI integration patterns",
+      "members": [
+        { "name": "TBD", "photo": null, "initials": "TBD", "location": "Hiring" }
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "icon": "\ud83e\uddf1",
+      "title": "Complexity",
+      "description": "Shopify is one piece of a much larger enterprise architecture puzzle the brand needs help demystifying."
+    },
+    {
+      "icon": "\ud83d\udd27",
+      "title": "Technical",
+      "description": "SE requires more subject matter expertise to adequately address brand concerns."
+    },
+    {
+      "icon": "\ud83e\udd1d",
+      "title": "Alignment",
+      "description": "Account team needs enhanced alignment with certain brand stakeholders."
+    }
+  ],
+  "engagementPaths": [
+    {
+      "badge": "Quick Question",
+      "badgeType": "green",
+      "title": "Ask-an-Architect Channel",
+      "description": "One-off solutioning questions that any member of the team could address. Preferred for segments outside Enterprise and Large Accounts.",
+      "steps": [
+        "Post your question in <strong>#ask-an-architect</strong>",
+        "Include context \u2014 account name, use case, timeline",
+        "An available SA will respond within one business day"
+      ]
+    },
+    {
+      "badge": "Dedicated Support",
+      "badgeType": "coral",
+      "title": "Salesforce Case Request",
+      "description": "For dedicated assistance on an active sales engagement. A primary SA will be assigned to the opportunity.",
+      "steps": [
+        "SE submits a <strong>New Case</strong> in Salesforce",
+        "Include problem statements and expected commitments",
+        "An SA is assigned and reaches out to align on approach"
+      ]
+    }
+  ],
+  "rules": {
+    "dos": [
+      "Engage early in the process \u2014 during Envision or Solution phases, not at the last minute.",
+      "Provide as much detail as possible on the problem statements and expected commitments in the case request.",
+      "Keep the SA in the loop throughout the engagement with a regular sync/async cadence.",
+      "Include relevant context upfront \u2014 architecture docs, stakeholder map, technical requirements."
+    ],
+    "donts": [
+      "Have the AE submit the SA request \u2014 it should come from the SE who understands the technical context.",
+      "Use the SA as a supplementary or replacement SE \u2014 SAs bring depth, not breadth.",
+      "Make promises for proof of concepts to the merchant before aligning with the SA team on scope and feasibility.",
+      "Engage an SA at the proposal stage when the deal needs strategic shaping, not just validation."
+    ]
+  },
+  "examples": [
+    {
+      "tags": ["Storefronts", "Architecture Review"],
+      "title": "Pre-Workshop Architecture Review",
+      "description": "Prior to an on-site workshop, the SE and AE engaged the SA to review provided architectural documentation and develop guidelines for integration and re-architecture details."
+    },
+    {
+      "tags": ["Headless", "POC"],
+      "title": "Headless Customer Experience POC",
+      "description": "Merchant wanted to drive customer experience online and in-store. SE engaged the SA to discuss headless workflows and help build a POC to demonstrate feasibility."
+    },
+    {
+      "tags": ["Retail", "ERP Integration"],
+      "title": "POS + OMS to ERP Integration",
+      "description": "Merchant moving POS and OMS to Shopify needed to understand ERP integration for Shipping and Cash & Carry orders. SE engaged SA for system workflow diagrams."
+    }
+  ],
+  "resources": [
+    {
+      "icon": "\ud83d\udcd0",
+      "title": "Architecture Diagram Library",
+      "description": "Curated repository of reusable, use-case diagram templates. Includes reference architectures from partners like Algolia, Recharge, and Vertex.",
+      "url": "https://www.appsheet.com/dbs/database/V7J_-HmEF24FIzzmBaWJm4/table/y3_oTyIVWb4EyVoVBjKB4d",
+      "linkText": "Open Library"
+    },
+    {
+      "icon": "\ud83e\udd16",
+      "title": "SA Call Coaches",
+      "description": "LibreChat agents trained to provide technical feedback on merchant call transcripts and pre-call discovery recommendations.",
+      "url": "https://chat.shopify.io/c/new?agent_id=agent_40nu0WVecZMNNpyDTiO-b",
+      "linkText": "Launch Coach"
+    },
+    {
+      "icon": "\ud83d\udcc1",
+      "title": "Solutions Architect Hub",
+      "description": "Seismic repository featuring SA-led enablement sessions and reusable content like POV pitches and solution guides.",
+      "url": "https://shopify.seismic.com/app#/doccenter/4e393d20-a349-4e08-890b-8f7596157b46",
+      "linkText": "Browse Hub"
+    }
+  ],
+  "leadership": [
+    {
+      "name": "Neilson Flemming",
+      "title": "Manager, SA Enterprise Large",
+      "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/7qqdl01rs74nhyjqhrlq3bbgzt6n.webp",
+      "location": "US \u00b7 ET (Eastern)",
+      "badge": "NORAM Lead"
+    },
+    {
+      "name": "Will Clack",
+      "title": "Manager, SA Enterprise Large",
+      "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/v317az3ul6sq43yu2cy6hmf9fivm.jpg",
+      "location": "UK \u00b7 GMT (London)",
+      "badge": "EMEA Lead"
+    }
+  ],
+  "team": {
+    "noram": [
+      { "name": "Aubrey Taylor", "specialty": "Storefronts", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/h2maii79chexf6i1um4t1xq7rf7i.jpg", "location": "US \u00b7 PT (Pacific)" },
+      { "name": "Christian Moore", "specialty": "Payments / Checkout / Subscriptions", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/glthbs5a7guygutaxmrh3kjt4ix9.webp", "location": "US \u00b7 CT (Central)" },
+      { "name": "Jeannine Mizne", "specialty": "Retail / POS", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/no8f1dp15fr9mb24sk2axzcy740t.webp", "location": "US \u00b7 ET (Eastern)" },
+      { "name": "Richad Abuani", "specialty": "Retail / POS", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/jc0knvvr8m66fa1ndf6vuaspojj1.webp", "location": "CA \u00b7 ET (Eastern)" },
+      { "name": "Ryan Pakyam", "specialty": "Payments", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/bwdqqaw4bh9kiv6jznuv6blbg7z8.webp", "location": "CA \u00b7 ET (Eastern)" },
+      { "name": "Sean Orfila", "specialty": "Storefronts", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/pn38m8zpetj2ib8v81uajf2pmg64.jpg", "location": "US \u00b7 PT (Pacific)" }
+    ],
+    "emea": [
+      { "name": "Christian Mackie", "specialty": "Checkout & Extensibility", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/plvemmt3hjwpyag2b2u920fagz3a.webp", "location": "UK \u00b7 GMT (London)" },
+      { "name": "Simon Flaherty", "specialty": "Storefronts", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/j5ohl6t32red3a6rbxjonzbmkc0f.webp", "location": "IE \u00b7 GMT (Dublin)" },
+      { "name": "Mike Watt", "specialty": "Security & Infrastructure", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/pnpnhqtfph1eo5iyzkfuvk9z79ws.webp", "location": "UK \u00b7 GMT (London)" },
+      { "name": "Peter Walker", "specialty": "Retail / POS", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/x2f8vud8hjwdzrj51dqietwbw1l1.webp", "location": "UK \u00b7 GMT (London)" },
+      { "name": "Pablo Ruiz Garcia", "specialty": "Payments", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/k6ayskgtz7fnterw4mvtg1ofu2ee.jpg", "location": "UK \u00b7 GMT (London)" }
+    ]
+  }
+}
