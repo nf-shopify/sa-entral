@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Quick client (provides quick.ai, quick.auth, quick.slack, etc. Only loads when on Quick.) -->
+  <script src="/client/quick.js"></script>
   <style>
     :root {
       --bg: #0B0F0D;
@@ -378,6 +380,21 @@
     .profile-contact a:hover { border-color: var(--border-hover); color: var(--green); }
     .has-profile { cursor: pointer; }
     .has-profile:hover { border-color: var(--green) !important; }
+
+    /* Status dot (Slack presence) */
+    .avatar-wrap { position: relative; display: inline-flex; flex-shrink: 0; }
+    .status-dot {
+      position: absolute; bottom: -1px; right: -1px;
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 2px solid var(--bg);
+      background: #636E72;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .disc-sa .status-dot { width: 8px; height: 8px; border-width: 1.5px; bottom: -1px; right: -1px; }
+    .status-active { background: #00C853; box-shadow: 0 0 6px rgba(0,200,83,0.6); }
+    .status-dnd    { background: #FFA726; }
+    .status-away   { background: #636E72; }
+    .status-unknown { background: transparent; border-color: transparent; }
     @media (max-width: 768px) {
       .profile-modal { padding: 16px; }
       .profile-inner { padding: 28px 20px; }
@@ -617,15 +634,27 @@
     // ── Fetch data and render ──
     // Quick serves over HTTPS so fetch works. For local file:// testing,
     // use a local server: python3 -m http.server 8888
-    fetch('./data.json')
+    fetch('./data.json?v=' + Date.now())
       .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(data => {
-        // Build global profile lookup from all people
+        // Build global profile lookup from all people.
+        // Index by full name AND short name (e.g. "Aubrey Taylor" + "Aubrey T.")
+        // so both team cards and discipline mini-avatars can resolve to the same profile.
         window._profiles = {};
         [...(data.leadership || []), ...(data.team.noram || []), ...(data.team.emea || [])].forEach(p => {
-          if (p.profile) window._profiles[p.name] = { ...p, ...p.profile };
+          if (p.profile) {
+            const profile = { ...p, ...p.profile };
+            window._profiles[p.name] = profile;
+            const parts = p.name.split(' ');
+            if (parts.length >= 2) {
+              const short = parts[0] + ' ' + parts[parts.length - 1][0] + '.';
+              window._profiles[short] = profile;
+            }
+          }
         });
 
+        console.log('Profiles loaded:', Object.keys(window._profiles));
+        document.title = 'Profiles: ' + Object.keys(window._profiles).join(', ');
         renderHero(data.hero);
         renderStats(data.stats);
         renderValue(data.valuePillars);
@@ -637,6 +666,7 @@
         renderExamples(data.examples);
         renderResources(data.resources);
         initAnimations();
+        initSlackPresence();
       })
       .catch(() => {
         document.getElementById('heroContent').innerHTML = `
@@ -688,13 +718,17 @@
             <span class="emoji">${d.icon}</span>
             <h3>${d.name}</h3>
             <p>${d.description}</p>
-            ${d.members.map((m, mi) => `
-              <div class="disc-sa"${mi > 0 ? ' style="border-top:none;padding-top:6px"' : ''}>
-                ${m.photo
-                  ? `<img class="disc-photo" src="${m.photo}" alt="${m.name}">`
-                  : `<div class="disc-avatar">${m.initials || m.name.split(' ').map(w=>w[0]).join('')}</div>`}
+            ${d.members.map((m, mi) => {
+              const clickable = window._profiles[m.name] ? ' has-profile" data-profile="' + m.name + '"' : '"';
+              const styleAttr = mi > 0 ? ' style="border-top:none;padding-top:6px"' : '';
+              const avatar = m.photo
+                ? `<span class="avatar-wrap"><img class="disc-photo" src="${m.photo}" alt="${m.name}"><span class="status-dot" data-sa="${m.name}"></span></span>`
+                : `<div class="disc-avatar">${m.initials || m.name.split(' ').map(w=>w[0]).join('')}</div>`;
+              return `<div class="disc-sa${clickable}${styleAttr}>
+                ${avatar}
                 <div><div class="disc-sa-info">${m.name}</div><div class="disc-sa-tz">${m.location}</div></div>
-              </div>`).join('')}
+              </div>`;
+            }).join('')}
           </div>`).join('')}
         </div>`;
     }
@@ -786,8 +820,8 @@
 
     function personClick(name) {
       return window._profiles[name]
-        ? ` has-profile" data-profile="${name}">`
-        : '">';
+        ? ` has-profile" data-profile="` + name + `">`
+        : `">`;
     }
 
     function renderTeam(leadership, team) {
@@ -800,7 +834,10 @@
         <div class="team-region-label reveal">Leadership</div>
         <div class="lead-grid">${leadership.map((l, i) => `
           <div class="lead-card reveal${delays[i] || ''}${personClick(l.name)}
-            <img class="lead-photo" src="${l.photo}" alt="${l.name}">
+            <span class="avatar-wrap">
+              <img class="lead-photo" src="${l.photo}" alt="${l.name}">
+              <span class="status-dot" data-sa="${l.name}"></span>
+            </span>
             <div>
               <div class="lead-name">${l.name}</div>
               <div class="lead-title">${l.title}</div>
@@ -814,7 +851,10 @@
           <div class="team-region-label reveal">${region.toUpperCase()}</div>
           <div class="team-grid">${members.map((m, i) => `
             <div class="team-card reveal${delays[i] || ''}${personClick(m.name)}
-              <img class="team-photo" src="${m.photo}" alt="${m.name}">
+              <span class="avatar-wrap">
+                <img class="team-photo" src="${m.photo}" alt="${m.name}">
+                <span class="status-dot" data-sa="${m.name}"></span>
+              </span>
               <div>
                 <div class="team-name">${m.name}</div>
                 <div class="team-spec">${m.specialty || ''}</div>
@@ -866,6 +906,61 @@
       });
     }
 
+    // ── Slack presence (live status dots) ──
+    async function initSlackPresence() {
+      // Build name → slackId map from all people with profiles
+      const slackIds = {};
+      for (const name in window._profiles) {
+        const p = window._profiles[name];
+        if (p.slack) slackIds[name] = p.slack;
+      }
+      if (Object.keys(slackIds).length === 0) return;
+
+      // quick.auth is only available when deployed on Quick. Fail gracefully locally.
+      if (typeof quick === 'undefined' || !quick.auth) {
+        console.log('Quick API not available — skipping Slack presence (local dev)');
+        return;
+      }
+
+      try {
+        const auth = await quick.auth.requestScopes(['users:read', 'dnd:read']);
+        if (!auth.hasRequiredScopes) {
+          console.warn('Slack scopes not granted — presence indicators will stay grey');
+          return;
+        }
+
+        const refresh = async () => {
+          const token = await quick.auth.getToken(['users:read', 'dnd:read']);
+          await Promise.all(Object.entries(slackIds).map(async ([name, id]) => {
+            try {
+              const [pRes, dRes] = await Promise.all([
+                fetch('https://slack.com/api/users.getPresence?user=' + id, {
+                  headers: { Authorization: 'Bearer ' + token.access_token }
+                }).then(r => r.json()),
+                fetch('https://slack.com/api/dnd.info?user=' + id, {
+                  headers: { Authorization: 'Bearer ' + token.access_token }
+                }).then(r => r.json()).catch(() => ({}))
+              ]);
+              let status = 'away';
+              if (pRes.presence === 'active') {
+                status = dRes.dnd_enabled ? 'dnd' : 'active';
+              }
+              // Apply to every dot matching this SA (both team and discipline cards)
+              document.querySelectorAll('.status-dot[data-sa="' + name + '"]').forEach(dot => {
+                dot.className = 'status-dot status-' + status;
+              });
+            } catch (e) {
+              // leave as grey
+            }
+          }));
+        };
+        await refresh();
+        setInterval(refresh, 120000); // refresh every 2 min
+      } catch (e) {
+        console.warn('Slack presence init failed:', e);
+      }
+    }
+
     // ── Profile modal ──
     function openProfile(name) {
       const p = window._profiles[name];
@@ -914,8 +1009,7 @@
           </div>` : ''}
 
         <div class="profile-contact">
-          ${p.slack ? '<a href="slack://user?team=T013ZM7K49C&id=' + p.slack + '">💬 Slack</a>' : ''}
-          ${p.email ? '<a href="mailto:' + p.email + '">📧 Email</a>' : ''}
+          ${p.slack ? '<a href="https://slack.com/app_redirect?channel=' + p.slack + '" target="_blank">💬 Message on Slack</a>' : ''}
         </div>`;
 
       document.getElementById('profileModal').classList.add('open');
