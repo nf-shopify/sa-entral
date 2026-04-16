@@ -646,9 +646,13 @@
             const profile = { ...p, ...p.profile };
             window._profiles[p.name] = profile;
             const parts = p.name.split(' ');
-            if (parts.length >= 2) {
-              const short = parts[0] + ' ' + parts[parts.length - 1][0] + '.';
-              window._profiles[short] = profile;
+            if (parts.length === 2) {
+              // "Aubrey Taylor" → "Aubrey T."
+              window._profiles[parts[0] + ' ' + parts[1][0] + '.'] = profile;
+            } else if (parts.length >= 3) {
+              // "Pablo Ruiz Garcia" → "Pablo R.G."
+              const initials = parts.slice(1).map(w => w[0]).join('.') + '.';
+              window._profiles[parts[0] + ' ' + initials] = profile;
             }
           }
         });
