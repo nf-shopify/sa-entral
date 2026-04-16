@@ -240,10 +240,71 @@
     .how-card:hover { border-color: var(--border-hover); }
     .how-video {
       margin-top: 20px; border-radius: 10px; overflow: hidden;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border); cursor: pointer; position: relative;
     }
+    .how-video:hover { border-color: var(--border-hover); }
     .how-video video {
       width: 100%; display: block; border-radius: 10px;
+      image-rendering: -webkit-optimize-contrast;
+    }
+    .how-video-hint {
+      position: absolute; bottom: 10px; right: 10px;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      padding: 4px 10px; border-radius: 6px;
+      font-size: 0.6rem; font-weight: 600; color: var(--white-muted);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      pointer-events: none; transition: opacity 0.2s;
+    }
+    .how-video:hover .how-video-hint { opacity: 0; }
+
+    /* Video Modal */
+    .video-modal {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px);
+      align-items: center; justify-content: center; padding: 40px;
+    }
+    .video-modal.open { display: flex; }
+    .video-modal-inner {
+      max-width: 960px; width: 100%; position: relative;
+      animation: modalIn 0.3s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .video-modal-close {
+      position: absolute; top: -40px; right: 0;
+      background: none; border: none; color: var(--white-muted);
+      font-size: 0.8rem; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s;
+    }
+    .video-modal-close:hover { color: var(--white); }
+    .video-modal video {
+      width: 100%; border-radius: 14px;
+      border: 1px solid var(--border);
+      image-rendering: -webkit-optimize-contrast;
+    }
+    .video-modal-steps {
+      margin-top: 20px; display: grid;
+      grid-template-columns: repeat(5, 1fr); gap: 10px;
+    }
+    .video-modal-step {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 12px; text-align: center;
+    }
+    .video-modal-step-num {
+      width: 24px; height: 24px; margin: 0 auto 8px;
+      background: var(--green-bg2); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 800; color: var(--green);
+    }
+    .video-modal-step p {
+      font-size: 0.72rem; color: var(--white-dim); line-height: 1.5;
+    }
+    @media (max-width: 768px) {
+      .video-modal { padding: 20px; }
+      .video-modal-steps { grid-template-columns: 1fr; }
     }
     .how-badge {
       display: inline-block; padding: 4px 10px; border-radius: 100px;
@@ -444,6 +505,15 @@
   <hr>
   <section class="section" id="team"><div class="container" id="teamSection"></div></section>
 
+  <!-- Video Modal -->
+  <div class="video-modal" id="videoModal">
+    <div class="video-modal-inner">
+      <button class="video-modal-close" id="videoModalClose">&times; Close</button>
+      <video id="videoModalPlayer" autoplay loop muted playsinline></video>
+      <div class="video-modal-steps" id="videoModalSteps"></div>
+    </div>
+  </div>
+
   <!-- Footer (static) -->
   <footer>
     <div class="container">
@@ -567,7 +637,7 @@
               <div class="how-steps">${p.steps.map((s, si) => `
                 <div class="how-step"><div class="how-step-num">${si+1}</div><p>${s}</p></div>`).join('')}
               </div>
-              ${p.video ? `<div class="how-video"><video src="${p.video}" autoplay loop muted playsinline></video></div>` : ''}
+              ${p.video ? `<div class="how-video" onclick="openVideoModal('${p.video}', ${JSON.stringify(p.videoSteps || []).replace(/"/g, '&quot;')})"><video src="${p.video}" autoplay loop muted playsinline></video><div class="how-video-hint">Click to expand</div></div>` : ''}
             </div>`;
             if (i === 0) return card + `<div class="how-or reveal d1"><div class="how-or-line"></div><span>or</span><div class="how-or-line"></div></div>`;
             return card;
@@ -693,6 +763,34 @@
       }, { threshold: 0.5 });
       statNums.forEach(el => statObs.observe(el));
     }
+
+    // ── Video modal ──
+    function openVideoModal(src, steps) {
+      const modal = document.getElementById('videoModal');
+      const player = document.getElementById('videoModalPlayer');
+      const stepsEl = document.getElementById('videoModalSteps');
+      player.src = src;
+      stepsEl.innerHTML = (steps || []).map((s, i) => `
+        <div class="video-modal-step">
+          <div class="video-modal-step-num">${i + 1}</div>
+          <p>${s}</p>
+        </div>`).join('');
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    document.getElementById('videoModalClose').addEventListener('click', closeVideoModal);
+    document.getElementById('videoModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeVideoModal();
+    });
+    function closeVideoModal() {
+      const modal = document.getElementById('videoModal');
+      modal.classList.remove('open');
+      document.getElementById('videoModalPlayer').src = '';
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeVideoModal();
+    });
 
     // ── Mobile nav ──
     document.getElementById('navToggle').addEventListener('click', () =>

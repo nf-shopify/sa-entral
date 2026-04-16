@@ -131,7 +131,14 @@
         "Include problem statements and expected commitments",
         "An SA is assigned and reaches out to align on approach"
       ],
-      "video": "request-sa-sf.mp4"
+      "video": "request-sa-sf.mp4",
+      "videoSteps": [
+        "Navigate to your Opportunity record",
+        "Create a \"New Case\"",
+        "Select \"Technical Services\"",
+        "Select \"Solution Architect\"",
+        "Fill out the request details and hit Next"
+      ]
     }
   ],
   "rules": {
