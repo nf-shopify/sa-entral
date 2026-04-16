@@ -785,7 +785,9 @@
     }
 
     function personClick(name) {
-      return window._profiles[name] ? ` has-profile" onclick="openProfile('${name.replace(/'/g, "\\'")}')"` : '"';
+      return window._profiles[name]
+        ? ` has-profile" onclick="openProfile('${name.replace(/'/g, "\\'")}')">`
+        : '">';
     }
 
     function renderTeam(leadership, team) {
