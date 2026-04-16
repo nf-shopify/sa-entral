@@ -201,7 +201,27 @@
       "title": "Manager, SA Enterprise Large",
       "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/7qqdl01rs74nhyjqhrlq3bbgzt6n.webp",
       "location": "US \u00b7 ET (Eastern)",
-      "badge": "NORAM Lead"
+      "badge": "NORAM Lead",
+      "profile": {
+        "level": "M4",
+        "specialty": "SA Leadership \u00b7 NORAM",
+        "startDate": "2022-06-27",
+        "career": [
+          { "role": "Head of Enterprise Solution Architecture, NA", "company": "Shopify", "period": "2022 \u2013 Present", "description": "Leading 6 Solutions Architects across Enterprise and Large accounts in NORAM" },
+          { "role": "Technical Architect, Professional Services", "company": "Salesforce", "period": "2020 \u2013 2022" },
+          { "role": "Sr. Manager, DTC Platforms \u2014 COE", "company": "Global Brands Group", "period": "2015 \u2013 2020" },
+          { "role": "Enterprise Architect", "company": "J.McLaughlin", "period": "2014 \u2013 2015" },
+          { "role": "IT Analyst", "company": "FENDI North America", "period": "2010 \u2013 2011" }
+        ],
+        "skills": ["Enterprise Architecture", "Claude / AI", "Commerce Platforms", "Team Leadership", "Solution Design", "Salesforce"],
+        "wins": [
+          "Placeholder \u2014 Notable Win 1",
+          "Placeholder \u2014 Notable Win 2",
+          "Placeholder \u2014 Notable Win 3"
+        ],
+        "slack": "U03L3D490F9",
+        "email": "neilson.flemming@shopify.com"
+      }
     },
     {
       "name": "Will Clack",

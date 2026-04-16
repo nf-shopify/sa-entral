@@ -306,6 +306,83 @@
       .video-modal { padding: 20px; }
       .video-modal-steps { grid-template-columns: 1fr; }
     }
+
+    /* Profile Modal */
+    .profile-modal {
+      display: none; position: fixed; inset: 0; z-index: 210;
+      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px);
+      align-items: center; justify-content: center; padding: 40px;
+    }
+    .profile-modal.open { display: flex; }
+    .profile-inner {
+      max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto;
+      background: #111714; border: 1px solid var(--border);
+      border-radius: 18px; padding: 36px 32px;
+      animation: modalIn 0.3s ease;
+    }
+    .profile-inner::-webkit-scrollbar { width: 4px; }
+    .profile-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .profile-close {
+      position: absolute; top: 16px; right: 20px;
+      background: none; border: none; color: var(--white-muted);
+      font-size: 1.2rem; cursor: pointer; transition: color 0.2s; z-index: 1;
+    }
+    .profile-close:hover { color: var(--white); }
+    .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
+    .profile-photo {
+      width: 80px; height: 80px; border-radius: 50%;
+      object-fit: cover; border: 2px solid var(--border); flex-shrink: 0;
+    }
+    .profile-name { font-size: 1.3rem; font-weight: 900; }
+    .profile-title { font-size: 0.8rem; color: var(--green); margin-top: 2px; }
+    .profile-meta { font-size: 0.7rem; color: var(--white-muted); margin-top: 4px; line-height: 1.6; }
+    .profile-section-label {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--green-dim);
+      margin-top: 24px; margin-bottom: 12px; padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .profile-career { display: flex; flex-direction: column; gap: 12px; }
+    .profile-career-item { display: flex; gap: 12px; align-items: flex-start; }
+    .profile-career-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0; margin-top: 6px;
+    }
+    .profile-career-dot.past { background: var(--border); }
+    .profile-career-role { font-size: 0.85rem; font-weight: 700; }
+    .profile-career-co { font-size: 0.75rem; color: var(--white-muted); }
+    .profile-career-desc { font-size: 0.72rem; color: var(--white-muted); margin-top: 2px; }
+    .profile-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .profile-skill {
+      padding: 4px 12px; border-radius: 100px; font-size: 0.65rem; font-weight: 600;
+      background: var(--green-bg2); color: var(--green); border: 1px solid var(--border);
+    }
+    .profile-wins { display: flex; flex-direction: column; gap: 8px; }
+    .profile-win {
+      font-size: 0.8rem; color: var(--white-dim); padding-left: 16px;
+      position: relative; line-height: 1.5;
+    }
+    .profile-win::before {
+      content: '\u2022'; position: absolute; left: 0; color: var(--green);
+    }
+    .profile-contact {
+      display: flex; gap: 10px; margin-top: 24px; padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .profile-contact a {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 8px; font-size: 0.7rem; font-weight: 600;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--white-dim); transition: border-color 0.2s, color 0.2s;
+    }
+    .profile-contact a:hover { border-color: var(--border-hover); color: var(--green); }
+    .has-profile { cursor: pointer; }
+    .has-profile:hover { border-color: var(--green) !important; }
+    @media (max-width: 768px) {
+      .profile-modal { padding: 16px; }
+      .profile-inner { padding: 28px 20px; }
+    }
+
     .how-badge {
       display: inline-block; padding: 4px 10px; border-radius: 100px;
       font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
@@ -475,12 +552,12 @@
       <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
       <div class="nav-links" id="navLinks">
         <a href="#value">Value</a>
+        <a href="#team">Team</a>
         <a href="#disciplines">Disciplines</a>
         <a href="#when">When</a>
         <a href="#how">How</a>
         <a href="#rules">DOs &amp; DON'Ts</a>
         <a href="#resources">Resources</a>
-        <a href="#team">Team</a>
         <a href="#how" class="nav-cta">Request an SA</a>
       </div>
     </div>
@@ -492,6 +569,8 @@
   <hr>
   <section class="section" id="value"><div class="container" id="valueSection"></div></section>
   <hr>
+  <section class="section" id="team"><div class="container" id="teamSection"></div></section>
+  <hr>
   <section class="section" id="disciplines"><div class="container" id="discSection"></div></section>
   <hr>
   <section class="section" id="when"><div class="container" id="whenSection"></div></section>
@@ -502,8 +581,6 @@
   <section class="section" id="examples"><div class="container" id="exSection"></div></section>
   <hr>
   <section class="section" id="resources"><div class="container" id="resSection"></div></section>
-  <hr>
-  <section class="section" id="team"><div class="container" id="teamSection"></div></section>
 
   <!-- Video Modal -->
   <div class="video-modal" id="videoModal">
@@ -511,6 +588,14 @@
       <button class="video-modal-close" id="videoModalClose">&times; Close</button>
       <video id="videoModalPlayer" autoplay loop muted playsinline></video>
       <div class="video-modal-steps" id="videoModalSteps"></div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="profile-modal" id="profileModal">
+    <div class="profile-inner" id="profileInner">
+      <button class="profile-close" id="profileClose">&times;</button>
+      <div id="profileContent"></div>
     </div>
   </div>
 
@@ -535,16 +620,22 @@
     fetch('./data.json')
       .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(data => {
+        // Build global profile lookup from all people
+        window._profiles = {};
+        [...(data.leadership || []), ...(data.team.noram || []), ...(data.team.emea || [])].forEach(p => {
+          if (p.profile) window._profiles[p.name] = { ...p, ...p.profile };
+        });
+
         renderHero(data.hero);
         renderStats(data.stats);
         renderValue(data.valuePillars);
+        renderTeam(data.leadership, data.team);
         renderDisciplines(data.disciplines);
         renderTriggers(data.triggers);
         renderHow(data.engagementPaths);
         renderRules(data.rules);
         renderExamples(data.examples);
         renderResources(data.resources);
-        renderTeam(data.leadership, data.team);
         initAnimations();
       })
       .catch(() => {
@@ -693,6 +784,10 @@
         </div>`;
     }
 
+    function personClick(name) {
+      return window._profiles[name] ? ` has-profile" onclick="openProfile('${name.replace(/'/g, "\\'")}')"` : '"';
+    }
+
     function renderTeam(leadership, team) {
       const delays = ['', ' d1', ' d2', ' d3', ' d4', ' d4'];
       document.getElementById('teamSection').innerHTML = `
@@ -702,7 +797,7 @@
 
         <div class="team-region-label reveal">Leadership</div>
         <div class="lead-grid">${leadership.map((l, i) => `
-          <div class="lead-card reveal${delays[i] || ''}">
+          <div class="lead-card reveal${delays[i] || ''}${personClick(l.name)}
             <img class="lead-photo" src="${l.photo}" alt="${l.name}">
             <div>
               <div class="lead-name">${l.name}</div>
@@ -716,11 +811,11 @@
         ${Object.entries(team).map(([region, members]) => `
           <div class="team-region-label reveal">${region.toUpperCase()}</div>
           <div class="team-grid">${members.map((m, i) => `
-            <div class="team-card reveal${delays[i] || ''}">
+            <div class="team-card reveal${delays[i] || ''}${personClick(m.name)}
               <img class="team-photo" src="${m.photo}" alt="${m.name}">
               <div>
                 <div class="team-name">${m.name}</div>
-                <div class="team-spec">${m.specialty}</div>
+                <div class="team-spec">${m.specialty || ''}</div>
                 <div class="team-tz">${m.location}</div>
               </div>
             </div>`).join('')}
@@ -764,6 +859,71 @@
       statNums.forEach(el => statObs.observe(el));
     }
 
+    // ── Profile modal ──
+    function openProfile(name) {
+      const p = window._profiles[name];
+      if (!p) return;
+      const years = p.startDate ? Math.floor((Date.now() - new Date(p.startDate).getTime()) / 31557600000) : '';
+      const sinceYear = p.startDate ? new Date(p.startDate).getFullYear() : '';
+
+      document.getElementById('profileContent').innerHTML = `
+        <div class="profile-header">
+          <img class="profile-photo" src="${p.photo}" alt="${p.name}">
+          <div>
+            <div class="profile-name">${p.name}</div>
+            <div class="profile-title">${p.title || ''} ${p.level ? '\u00b7 ' + p.level : ''}</div>
+            <div class="profile-meta">
+              ${p.specialty ? p.specialty + '<br>' : ''}
+              ${p.location || ''}
+              ${sinceYear ? '<br>At Shopify since ' + sinceYear + ' (' + years + 'yr)' : ''}
+            </div>
+          </div>
+        </div>
+
+        ${p.career && p.career.length ? `
+          <div class="profile-section-label">Career</div>
+          <div class="profile-career">
+            ${p.career.map((c, i) => `
+              <div class="profile-career-item">
+                <div class="profile-career-dot${i > 0 ? ' past' : ''}"></div>
+                <div>
+                  <div class="profile-career-role">${c.role}</div>
+                  <div class="profile-career-co">${c.company} \u00b7 ${c.period}</div>
+                  ${c.description ? '<div class="profile-career-desc">' + c.description + '</div>' : ''}
+                </div>
+              </div>`).join('')}
+          </div>` : ''}
+
+        ${p.skills && p.skills.length ? `
+          <div class="profile-section-label">Skills</div>
+          <div class="profile-skills">
+            ${p.skills.map(s => '<span class="profile-skill">' + s + '</span>').join('')}
+          </div>` : ''}
+
+        ${p.wins && p.wins.length ? `
+          <div class="profile-section-label">Notable</div>
+          <div class="profile-wins">
+            ${p.wins.map(w => '<div class="profile-win">' + w + '</div>').join('')}
+          </div>` : ''}
+
+        <div class="profile-contact">
+          ${p.slack ? '<a href="slack://user?team=T013ZM7K49C&id=' + p.slack + '">💬 Slack</a>' : ''}
+          ${p.email ? '<a href="mailto:' + p.email + '">📧 Email</a>' : ''}
+        </div>`;
+
+      document.getElementById('profileModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    document.getElementById('profileClose').addEventListener('click', closeProfile);
+    document.getElementById('profileModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeProfile();
+    });
+    function closeProfile() {
+      document.getElementById('profileModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
     // ── Video modal ──
     function openVideoModal(src, steps) {
       const modal = document.getElementById('videoModal');
@@ -789,7 +949,7 @@
       document.body.style.overflow = '';
     }
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeVideoModal();
+      if (e.key === 'Escape') { closeVideoModal(); closeProfile(); }
     });
 
     // ── Mobile nav ──
