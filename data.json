@@ -206,7 +206,7 @@
         "specialty": "SA Leadership \u00b7 NORAM",
         "startDate": "2022-06-27",
         "career": [
-          { "role": "Manager, Solution Architect NAMER", "company": "Shopify", "period": "2022 \u2013 Present", "description": "Leading 6 Solutions Architects across Enterprise and Large accounts in NORAM" },
+          { "role": "Manager, Solution Architect NAMER", "company": "Shopify", "period": "2022 \u2013 Present" },
           { "role": "Technical Architect, Professional Services", "company": "Salesforce", "period": "2020 \u2013 2022" },
           { "role": "Sr. Manager, DTC Platforms \u2014 COE", "company": "Global Brands Group", "period": "2015 \u2013 2020" },
           { "role": "Enterprise Architect", "company": "J.McLaughlin", "period": "2014 \u2013 2015" },
@@ -241,12 +241,12 @@
           "specialty": "Storefronts \u00b7 Headless / Hydrogen / Extensibility",
           "startDate": "2025-11-17",
           "career": [
-            { "role": "Staff Solution Architect (Enterprise, Storefront)", "company": "Shopify", "period": "Nov 2025 \u2013 Present", "description": "Architecting sophisticated, multi-brand, international commerce for the world's largest retailers. Liquid + Headless (Hydrogen), Shopify APIs, Functions and Extensibility (Checkout, Admin, Account), data modeling with Metafields and Metaobjects, CMS integrations, strategic technical solutioning." },
-            { "role": "Principal Platform Technical Architect", "company": "Accenture Song", "period": "Mar 2023 \u2013 Nov 2025", "description": "Led technical platform architecture for Shopify Plus and Shopify Enterprise. Partnered on pre-sales and solution advisory, translating business goals into technical architecture. Drove practice-wide improvements through reusable assets and architectural best practices." },
-            { "role": "Director of Technology, Architecture", "company": "The Stable (Accenture Song)", "period": "Jan 2022 \u2013 Mar 2023", "description": "Directed technical strategy and architecture for Shopify Plus commerce implementations. Delivered technical audits, architecture roadmaps, and platform modernization strategies for enterprise clients." },
-            { "role": "Director of Technology", "company": "ZEHNER", "period": "Mar 2018 \u2013 Jan 2022", "description": "Led end-to-end technology delivery across a portfolio of high-profile commerce and digital experience projects. Introduced modern frontend and backend frameworks and scalable engineering standards." },
-            { "role": "Tech Director", "company": "BLITZ", "period": "2009 \u2013 Mar 2018", "description": "8+ years at BLITZ, progressing from Software Developer to Tech Director. Shipped commerce and digital experience work across enterprise brands." },
-            { "role": "Web Developer / Designer", "company": "Deadline Advertising", "period": "Mar 2007 \u2013 Oct 2009" }
+            { "role": "Staff Solution Architect", "company": "Shopify", "period": "2025 \u2013 Present" },
+            { "role": "Principal Platform Technical Architect", "company": "Accenture Song", "period": "2023 \u2013 2025" },
+            { "role": "Director of Technology, Architecture", "company": "The Stable (Accenture Song)", "period": "2022 \u2013 2023" },
+            { "role": "Director of Technology", "company": "ZEHNER", "period": "2018 \u2013 2022" },
+            { "role": "Tech Director", "company": "BLITZ", "period": "2009 \u2013 2018" },
+            { "role": "Web Developer / Designer", "company": "Deadline Advertising", "period": "2007 \u2013 2009" }
           ],
           "skills": ["Liquid", "Hydrogen / Headless", "Checkout Extensibility", "Functions", "Shopify APIs", "Metafields / Metaobjects", "Data Modeling", "Enterprise Architecture"],
           "wins": [
