@@ -203,7 +203,6 @@
       "location": "US \u00b7 ET (Eastern)",
       "badge": "NORAM Lead",
       "profile": {
-        "level": "M4",
         "specialty": "SA Leadership \u00b7 NORAM",
         "startDate": "2022-06-27",
         "career": [
@@ -239,12 +238,10 @@
         "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/h2maii79chexf6i1um4t1xq7rf7i.jpg",
         "location": "US \u00b7 PT (Pacific)",
         "profile": {
-          "level": "C7",
           "specialty": "Storefronts \u00b7 Headless / Hydrogen / Extensibility",
           "startDate": "2025-11-17",
           "career": [
-            { "role": "Lead Solution Engineer, Commercial, SA", "company": "Shopify", "period": "2025 \u2013 Present", "description": "Custom architecture, Liquid and headless (Hydrogen) implementations, advanced platform extensibility (Checkout, Admin, Account UI Extensions, Functions), Shopify API integration, and data modeling." },
-            { "role": "Prior role (LinkedIn-gated \u2014 to fill in)", "company": "Prior Company", "period": "\u2013 2025" }
+            { "role": "Staff Solution Architect (Enterprise, Storefront)", "company": "Shopify", "period": "2025 \u2013 Present", "description": "Architecting multi-brand, international storefront solutions for the world's biggest retailers. Custom architecture, Liquid + headless (Hydrogen), checkout/admin/account UI extensions, functions, Shopify API integration, data modeling." }
           ],
           "skills": ["Liquid", "Hydrogen / Headless", "Checkout Extensibility", "Functions", "Shopify APIs", "Claude / AI", "Data Modeling"],
           "wins": [
