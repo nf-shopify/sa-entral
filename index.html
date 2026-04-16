@@ -786,7 +786,7 @@
 
     function personClick(name) {
       return window._profiles[name]
-        ? ` has-profile" onclick="openProfile('${name.replace(/'/g, "\\'")}')">`
+        ? ` has-profile" data-profile="${name}">`
         : '">';
     }
 
@@ -859,6 +859,11 @@
         });
       }, { threshold: 0.5 });
       statNums.forEach(el => statObs.observe(el));
+
+      // Profile click delegation
+      document.querySelectorAll('[data-profile]').forEach(el => {
+        el.addEventListener('click', () => openProfile(el.dataset.profile));
+      });
     }
 
     // ── Profile modal ──
