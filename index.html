@@ -969,8 +969,21 @@
     function openProfile(name) {
       const p = window._profiles[name];
       if (!p) return;
-      const years = p.startDate ? Math.floor((Date.now() - new Date(p.startDate).getTime()) / 31557600000) : '';
-      const sinceYear = p.startDate ? new Date(p.startDate).getFullYear() : '';
+      let tenure = '';
+      let sinceYear = '';
+      if (p.startDate) {
+        const start = new Date(p.startDate);
+        const now = new Date();
+        let months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+        if (now.getDate() < start.getDate()) months -= 1;
+        if (months < 0) months = 0;
+        const y = Math.floor(months / 12);
+        const m = months % 12;
+        const yStr = y ? y + 'yr' : '';
+        const mStr = m ? m + 'mo' : '';
+        tenure = [yStr, mStr].filter(Boolean).join(' ') || '0mo';
+        sinceYear = start.getFullYear();
+      }
 
       document.getElementById('profileContent').innerHTML = `
         <div class="profile-header">
@@ -981,7 +994,7 @@
             <div class="profile-meta">
               ${p.specialty ? p.specialty + '<br>' : ''}
               ${p.location || ''}
-              ${sinceYear ? '<br>At Shopify since ' + sinceYear + ' (' + years + 'yr)' : ''}
+              ${sinceYear ? '<br>At Shopify since ' + sinceYear + ' (' + tenure + ')' : ''}
             </div>
           </div>
         </div>
