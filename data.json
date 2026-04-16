@@ -202,6 +202,7 @@
       "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/7qqdl01rs74nhyjqhrlq3bbgzt6n.webp",
       "location": "US \u00b7 ET (Eastern)",
       "badge": "NORAM Lead",
+      "slack": "U03L3D490F9",
       "profile": {
         "specialty": "SA Leadership \u00b7 NORAM",
         "startDate": "2022-06-27",
@@ -227,7 +228,8 @@
       "title": "Manager, SA Enterprise Large",
       "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/v317az3ul6sq43yu2cy6hmf9fivm.jpg",
       "location": "UK \u00b7 GMT (London)",
-      "badge": "EMEA Lead"
+      "badge": "EMEA Lead",
+      "slack": "U09H7GYPVRV"
     }
   ],
   "team": {
@@ -237,6 +239,7 @@
         "specialty": "Storefronts",
         "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/h2maii79chexf6i1um4t1xq7rf7i.jpg",
         "location": "US \u00b7 PT (Pacific)",
+        "slack": "U09SSUZCK0R",
         "profile": {
           "specialty": "Storefronts \u00b7 Headless / Hydrogen / Extensibility",
           "startDate": "2025-11-17",
@@ -258,18 +261,18 @@
           "slack": "U09SSUZCK0R"
         }
       },
-      { "name": "Christian Moore", "specialty": "Payments / Checkout / Subscriptions", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/glthbs5a7guygutaxmrh3kjt4ix9.webp", "location": "US \u00b7 CT (Central)" },
-      { "name": "Jeannine Mizne", "specialty": "Retail / POS", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/no8f1dp15fr9mb24sk2axzcy740t.webp", "location": "US \u00b7 ET (Eastern)" },
-      { "name": "Richad Abuani", "specialty": "Retail / POS", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/jc0knvvr8m66fa1ndf6vuaspojj1.webp", "location": "CA \u00b7 ET (Eastern)" },
-      { "name": "Ryan Pakyam", "specialty": "Payments", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/bwdqqaw4bh9kiv6jznuv6blbg7z8.webp", "location": "CA \u00b7 ET (Eastern)" },
-      { "name": "Sean Orfila", "specialty": "Storefronts", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/pn38m8zpetj2ib8v81uajf2pmg64.jpg", "location": "US \u00b7 PT (Pacific)" }
+      { "name": "Christian Moore", "specialty": "Payments / Checkout / Subscriptions", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/glthbs5a7guygutaxmrh3kjt4ix9.webp", "location": "US \u00b7 CT (Central)", "slack": "U08J87BE9A9" },
+      { "name": "Jeannine Mizne", "specialty": "Retail / POS", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/no8f1dp15fr9mb24sk2axzcy740t.webp", "location": "US \u00b7 ET (Eastern)", "slack": "U08J2TLJ58E" },
+      { "name": "Richad Abuani", "specialty": "Retail / POS", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/jc0knvvr8m66fa1ndf6vuaspojj1.webp", "location": "CA \u00b7 ET (Eastern)", "slack": "U05APCQ6EFK" },
+      { "name": "Ryan Pakyam", "specialty": "Payments", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/bwdqqaw4bh9kiv6jznuv6blbg7z8.webp", "location": "CA \u00b7 ET (Eastern)", "slack": "U099LU9R4EA" },
+      { "name": "Sean Orfila", "specialty": "Storefronts", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/pn38m8zpetj2ib8v81uajf2pmg64.jpg", "location": "US \u00b7 PT (Pacific)", "slack": "U09GJEFGBE2" }
     ],
     "emea": [
-      { "name": "Christian Mackie", "specialty": "Checkout & Extensibility", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/plvemmt3hjwpyag2b2u920fagz3a.webp", "location": "UK \u00b7 GMT (London)" },
-      { "name": "Simon Flaherty", "specialty": "Storefronts", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/j5ohl6t32red3a6rbxjonzbmkc0f.webp", "location": "IE \u00b7 GMT (Dublin)" },
-      { "name": "Mike Watt", "specialty": "Security & Infrastructure", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/pnpnhqtfph1eo5iyzkfuvk9z79ws.webp", "location": "UK \u00b7 GMT (London)" },
-      { "name": "Peter Walker", "specialty": "Retail / POS", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/x2f8vud8hjwdzrj51dqietwbw1l1.webp", "location": "UK \u00b7 GMT (London)" },
-      { "name": "Pablo Ruiz Garcia", "specialty": "Payments", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/k6ayskgtz7fnterw4mvtg1ofu2ee.jpg", "location": "UK \u00b7 GMT (London)" }
+      { "name": "Christian Mackie", "specialty": "Checkout & Extensibility", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/plvemmt3hjwpyag2b2u920fagz3a.webp", "location": "UK \u00b7 GMT (London)", "slack": "W018GA4N361" },
+      { "name": "Simon Flaherty", "specialty": "Storefronts", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/j5ohl6t32red3a6rbxjonzbmkc0f.webp", "location": "IE \u00b7 GMT (Dublin)", "slack": "W0197GH2D4Y" },
+      { "name": "Mike Watt", "specialty": "Security & Infrastructure", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/pnpnhqtfph1eo5iyzkfuvk9z79ws.webp", "location": "UK \u00b7 GMT (London)", "slack": "U08HABDQEAE" },
+      { "name": "Peter Walker", "specialty": "Retail / POS", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/x2f8vud8hjwdzrj51dqietwbw1l1.webp", "location": "UK \u00b7 GMT (London)", "slack": "U09BLDEFM9V" },
+      { "name": "Pablo Ruiz Garcia", "specialty": "Payments", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/k6ayskgtz7fnterw4mvtg1ofu2ee.jpg", "location": "UK \u00b7 GMT (London)", "slack": "U0AHY4SHMA6" }
     ]
   }
 }

@@ -502,6 +502,7 @@
     /* Leadership */
     .lead-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 40px; max-width: 700px; margin-left: auto; margin-right: auto; }
     .lead-card {
+      position: relative;
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: 16px; padding: 28px 24px;
       display: flex; align-items: center; gap: 20px;
@@ -532,6 +533,7 @@
     .team-region-label { max-width: 960px; margin-left: auto; margin-right: auto; }
     .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 960px; margin-left: auto; margin-right: auto; }
     .team-card {
+      position: relative;
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: 12px; padding: 16px 14px;
       display: flex; align-items: center; gap: 14px;
@@ -542,9 +544,29 @@
       width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
       object-fit: cover; border: 2px solid var(--border);
     }
-    .team-name { font-size: 0.85rem; font-weight: 700; }
-    .team-spec { font-size: 0.72rem; color: var(--green); }
+    .team-name { font-size: 0.85rem; font-weight: 700; padding-right: 20px; }
+    .team-spec { font-size: 0.72rem; color: var(--green); padding-right: 20px; }
     .team-tz { font-size: 0.62rem; color: var(--white-muted); margin-top: 1px; }
+
+    /* Slack DM icon on team/lead cards */
+    .card-slack {
+      position: absolute; top: 10px; right: 10px;
+      width: 26px; height: 26px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--white-muted);
+      border: 1px solid transparent;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+      text-decoration: none;
+      z-index: 2;
+    }
+    .card-slack:hover {
+      background: var(--green-bg2); color: var(--green);
+      border-color: var(--border-hover);
+      transform: scale(1.05);
+    }
+    .card-slack svg { width: 14px; height: 14px; fill: currentColor; }
+    .lead-card .card-slack { top: 14px; right: 14px; width: 30px; height: 30px; }
+    .lead-card .card-slack svg { width: 16px; height: 16px; }
     @media (max-width: 768px) { .team-grid { grid-template-columns: 1fr 1fr; } .lead-grid { grid-template-columns: 1fr; } }
     @media (max-width: 480px) { .team-grid { grid-template-columns: 1fr; } }
 
@@ -828,6 +850,13 @@
         : `">`;
     }
 
+    function slackBtn(slackId, name) {
+      if (!slackId) return '';
+      return `<a class="card-slack" href="https://slack.com/app_redirect?channel=${slackId}" target="_blank" rel="noopener" title="Message ${name} on Slack" onclick="event.stopPropagation()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zm1.271 0a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zm0 1.271a2.527 2.527 0 0 1 2.521 2.521 2.527 2.527 0 0 1-2.521 2.521H2.522A2.527 2.527 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zm10.122 2.521a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zm-1.268 0a2.527 2.527 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zm-2.523 10.122a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.523v-2.52h2.52zm0-1.268a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>
+      </a>`;
+    }
+
     function renderTeam(leadership, team) {
       const delays = ['', ' d1', ' d2', ' d3', ' d4', ' d4'];
       document.getElementById('teamSection').innerHTML = `
@@ -838,6 +867,7 @@
         <div class="team-region-label reveal">Leadership</div>
         <div class="lead-grid">${leadership.map((l, i) => `
           <div class="lead-card reveal${delays[i] || ''}${personClick(l.name)}
+            ${slackBtn(l.slack, l.name)}
             <span class="avatar-wrap">
               <img class="lead-photo" src="${l.photo}" alt="${l.name}">
               <span class="status-dot" data-sa="${l.name}"></span>
@@ -855,6 +885,7 @@
           <div class="team-region-label reveal">${region.toUpperCase()}</div>
           <div class="team-grid">${members.map((m, i) => `
             <div class="team-card reveal${delays[i] || ''}${personClick(m.name)}
+              ${slackBtn(m.slack, m.name)}
               <span class="avatar-wrap">
                 <img class="team-photo" src="${m.photo}" alt="${m.name}">
                 <span class="status-dot" data-sa="${m.name}"></span>
