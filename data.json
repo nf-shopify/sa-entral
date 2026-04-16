@@ -130,7 +130,8 @@
         "SE submits a <strong>New Case</strong> in Salesforce",
         "Include problem statements and expected commitments",
         "An SA is assigned and reaches out to align on approach"
-      ]
+      ],
+      "video": "request-sa-sf.mp4"
     }
   ],
   "rules": {

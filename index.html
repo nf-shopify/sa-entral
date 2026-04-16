@@ -238,6 +238,13 @@
       border-radius: 16px; padding: 32px 28px; transition: border-color 0.3s;
     }
     .how-card:hover { border-color: var(--border-hover); }
+    .how-video {
+      margin-top: 20px; border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .how-video video {
+      width: 100%; display: block; border-radius: 10px;
+    }
     .how-badge {
       display: inline-block; padding: 4px 10px; border-radius: 100px;
       font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
@@ -453,8 +460,10 @@
 
   <script>
     // ── Fetch data and render ──
+    // Quick serves over HTTPS so fetch works. For local file:// testing,
+    // use a local server: python3 -m http.server 8888
     fetch('./data.json')
-      .then(r => r.json())
+      .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(data => {
         renderHero(data.hero);
         renderStats(data.stats);
@@ -467,6 +476,11 @@
         renderResources(data.resources);
         renderTeam(data.leadership, data.team);
         initAnimations();
+      })
+      .catch(() => {
+        document.getElementById('heroContent').innerHTML = `
+          <h1 style="font-size:2rem;margin-top:40px">Loading data...</h1>
+          <p class="hero-desc">If you're viewing this locally, run: <code style="background:rgba(0,200,83,0.15);padding:2px 8px;border-radius:4px">python3 -m http.server 8888</code> then open <code style="background:rgba(0,200,83,0.15);padding:2px 8px;border-radius:4px">http://localhost:8888</code></p>`;
       });
 
     function renderHero(h) {
@@ -553,6 +567,7 @@
               <div class="how-steps">${p.steps.map((s, si) => `
                 <div class="how-step"><div class="how-step-num">${si+1}</div><p>${s}</p></div>`).join('')}
               </div>
+              ${p.video ? `<div class="how-video"><video src="${p.video}" autoplay loop muted playsinline></video></div>` : ''}
             </div>`;
             if (i === 0) return card + `<div class="how-or reveal d1"><div class="how-or-line"></div><span>or</span><div class="how-or-line"></div></div>`;
             return card;
