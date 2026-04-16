@@ -7,8 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- Quick client (provides quick.ai, quick.auth, quick.slack, etc. Only loads when on Quick.) -->
-  <script src="/client/quick.js"></script>
   <style>
     :root {
       --bg: #0B0F0D;
@@ -381,20 +379,6 @@
     .has-profile { cursor: pointer; }
     .has-profile:hover { border-color: var(--green) !important; }
 
-    /* Status dot (Slack presence) */
-    .avatar-wrap { position: relative; display: inline-flex; flex-shrink: 0; }
-    .status-dot {
-      position: absolute; bottom: -1px; right: -1px;
-      width: 12px; height: 12px; border-radius: 50%;
-      border: 2px solid var(--bg);
-      background: #636E72;
-      transition: background 0.3s, box-shadow 0.3s;
-    }
-    .disc-sa .status-dot { width: 8px; height: 8px; border-width: 1.5px; bottom: -1px; right: -1px; }
-    .status-active { background: #00C853; box-shadow: 0 0 6px rgba(0,200,83,0.6); }
-    .status-dnd    { background: #FFA726; }
-    .status-away   { background: #636E72; }
-    .status-unknown { background: transparent; border-color: transparent; }
     @media (max-width: 768px) {
       .profile-modal { padding: 16px; }
       .profile-inner { padding: 28px 20px; }
@@ -509,6 +493,7 @@
       transition: border-color 0.3s, transform 0.2s;
     }
     .lead-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+    .lead-card > div:last-child { padding-right: 54px; flex: 1; min-width: 0; }
     .lead-photo {
       width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
       object-fit: cover; border: 2px solid var(--border);
@@ -544,29 +529,31 @@
       width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
       object-fit: cover; border: 2px solid var(--border);
     }
-    .team-name { font-size: 0.85rem; font-weight: 700; padding-right: 20px; }
-    .team-spec { font-size: 0.72rem; color: var(--green); padding-right: 20px; }
+    .team-card > div { min-width: 0; padding-right: 44px; flex: 1; }
+    .team-name { font-size: 0.85rem; font-weight: 700; }
+    .team-spec { font-size: 0.72rem; color: var(--green); }
     .team-tz { font-size: 0.62rem; color: var(--white-muted); margin-top: 1px; }
 
-    /* Slack DM icon on team/lead cards */
+    /* Slack DM icon on team/lead cards — vertically centered */
     .card-slack {
-      position: absolute; top: 10px; right: 10px;
-      width: 26px; height: 26px; border-radius: 6px;
+      position: absolute; top: 50%; right: 12px;
+      transform: translateY(-50%);
+      width: 32px; height: 32px; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      background: transparent; color: var(--white-muted);
+      background: transparent;
       border: 1px solid transparent;
-      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
       text-decoration: none;
       z-index: 2;
     }
     .card-slack:hover {
-      background: var(--green-bg2); color: var(--green);
+      background: var(--green-bg2);
       border-color: var(--border-hover);
-      transform: scale(1.05);
+      transform: translateY(-50%) scale(1.08);
     }
-    .card-slack svg { width: 14px; height: 14px; fill: currentColor; }
-    .lead-card .card-slack { top: 14px; right: 14px; width: 30px; height: 30px; }
-    .lead-card .card-slack svg { width: 16px; height: 16px; }
+    .card-slack svg { width: 18px; height: 18px; display: block; }
+    .lead-card .card-slack { right: 16px; width: 38px; height: 38px; }
+    .lead-card .card-slack svg { width: 22px; height: 22px; }
     @media (max-width: 768px) { .team-grid { grid-template-columns: 1fr 1fr; } .lead-grid { grid-template-columns: 1fr; } }
     @media (max-width: 480px) { .team-grid { grid-template-columns: 1fr; } }
 
@@ -692,7 +679,6 @@
         renderExamples(data.examples);
         renderResources(data.resources);
         initAnimations();
-        initSlackPresence();
       })
       .catch(() => {
         document.getElementById('heroContent').innerHTML = `
@@ -748,7 +734,7 @@
               const clickable = window._profiles[m.name] ? ' has-profile" data-profile="' + m.name + '"' : '"';
               const styleAttr = mi > 0 ? ' style="border-top:none;padding-top:6px"' : '';
               const avatar = m.photo
-                ? `<span class="avatar-wrap"><img class="disc-photo" src="${m.photo}" alt="${m.name}"><span class="status-dot" data-sa="${m.name}"></span></span>`
+                ? `<img class="disc-photo" src="${m.photo}" alt="${m.name}">`
                 : `<div class="disc-avatar">${m.initials || m.name.split(' ').map(w=>w[0]).join('')}</div>`;
               return `<div class="disc-sa${clickable}${styleAttr}>
                 ${avatar}
@@ -853,7 +839,12 @@
     function slackBtn(slackId, name) {
       if (!slackId) return '';
       return `<a class="card-slack" href="https://slack.com/app_redirect?channel=${slackId}" target="_blank" rel="noopener" title="Message ${name} on Slack" onclick="event.stopPropagation()">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zm1.271 0a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zm0 1.271a2.527 2.527 0 0 1 2.521 2.521 2.527 2.527 0 0 1-2.521 2.521H2.522A2.527 2.527 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zm10.122 2.521a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zm-1.268 0a2.527 2.527 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zm-2.523 10.122a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.523v-2.52h2.52zm0-1.268a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>
+        <svg viewBox="0 0 122.8 122.8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#E01E5A" d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9zm6.5 0c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V77.6z"/>
+          <path fill="#36C5F0" d="M45.2 25.8c-7.1 0-12.9-5.8-12.9-12.9S38.1 0 45.2 0s12.9 5.8 12.9 12.9v12.9H45.2zm0 6.5c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H12.9C5.8 58.1 0 52.3 0 45.2s5.8-12.9 12.9-12.9h32.3z"/>
+          <path fill="#2EB67D" d="M97 45.2c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9-5.8 12.9-12.9 12.9H97V45.2zm-6.5 0c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V12.9C64.7 5.8 70.5 0 77.6 0s12.9 5.8 12.9 12.9v32.3z"/>
+          <path fill="#ECB22E" d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-12.9-5.8-12.9-12.9V97h12.9zm0-6.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z"/>
+        </svg>
       </a>`;
     }
 
@@ -868,10 +859,7 @@
         <div class="lead-grid">${leadership.map((l, i) => `
           <div class="lead-card reveal${delays[i] || ''}${personClick(l.name)}
             ${slackBtn(l.slack, l.name)}
-            <span class="avatar-wrap">
-              <img class="lead-photo" src="${l.photo}" alt="${l.name}">
-              <span class="status-dot" data-sa="${l.name}"></span>
-            </span>
+            <img class="lead-photo" src="${l.photo}" alt="${l.name}">
             <div>
               <div class="lead-name">${l.name}</div>
               <div class="lead-title">${l.title}</div>
@@ -886,10 +874,7 @@
           <div class="team-grid">${members.map((m, i) => `
             <div class="team-card reveal${delays[i] || ''}${personClick(m.name)}
               ${slackBtn(m.slack, m.name)}
-              <span class="avatar-wrap">
-                <img class="team-photo" src="${m.photo}" alt="${m.name}">
-                <span class="status-dot" data-sa="${m.name}"></span>
-              </span>
+              <img class="team-photo" src="${m.photo}" alt="${m.name}">
               <div>
                 <div class="team-name">${m.name}</div>
                 <div class="team-spec">${m.specialty || ''}</div>
@@ -939,61 +924,6 @@
       document.querySelectorAll('[data-profile]').forEach(el => {
         el.addEventListener('click', () => openProfile(el.dataset.profile));
       });
-    }
-
-    // ── Slack presence (live status dots) ──
-    async function initSlackPresence() {
-      // Build name → slackId map from all people with profiles
-      const slackIds = {};
-      for (const name in window._profiles) {
-        const p = window._profiles[name];
-        if (p.slack) slackIds[name] = p.slack;
-      }
-      if (Object.keys(slackIds).length === 0) return;
-
-      // quick.auth is only available when deployed on Quick. Fail gracefully locally.
-      if (typeof quick === 'undefined' || !quick.auth) {
-        console.log('Quick API not available — skipping Slack presence (local dev)');
-        return;
-      }
-
-      try {
-        const auth = await quick.auth.requestScopes(['users:read', 'dnd:read']);
-        if (!auth.hasRequiredScopes) {
-          console.warn('Slack scopes not granted — presence indicators will stay grey');
-          return;
-        }
-
-        const refresh = async () => {
-          const token = await quick.auth.getToken(['users:read', 'dnd:read']);
-          await Promise.all(Object.entries(slackIds).map(async ([name, id]) => {
-            try {
-              const [pRes, dRes] = await Promise.all([
-                fetch('https://slack.com/api/users.getPresence?user=' + id, {
-                  headers: { Authorization: 'Bearer ' + token.access_token }
-                }).then(r => r.json()),
-                fetch('https://slack.com/api/dnd.info?user=' + id, {
-                  headers: { Authorization: 'Bearer ' + token.access_token }
-                }).then(r => r.json()).catch(() => ({}))
-              ]);
-              let status = 'away';
-              if (pRes.presence === 'active') {
-                status = dRes.dnd_enabled ? 'dnd' : 'active';
-              }
-              // Apply to every dot matching this SA (both team and discipline cards)
-              document.querySelectorAll('.status-dot[data-sa="' + name + '"]').forEach(dot => {
-                dot.className = 'status-dot status-' + status;
-              });
-            } catch (e) {
-              // leave as grey
-            }
-          }));
-        };
-        await refresh();
-        setInterval(refresh, 120000); // refresh every 2 min
-      } catch (e) {
-        console.warn('Slack presence init failed:', e);
-      }
     }
 
     // ── Profile modal ──
