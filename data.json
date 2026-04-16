@@ -241,16 +241,21 @@
           "specialty": "Storefronts \u00b7 Headless / Hydrogen / Extensibility",
           "startDate": "2025-11-17",
           "career": [
-            { "role": "Staff Solution Architect (Enterprise, Storefront)", "company": "Shopify", "period": "2025 \u2013 Present", "description": "Architecting multi-brand, international storefront solutions for the world's biggest retailers. Custom architecture, Liquid + headless (Hydrogen), checkout/admin/account UI extensions, functions, Shopify API integration, data modeling." }
+            { "role": "Staff Solution Architect (Enterprise, Storefront)", "company": "Shopify", "period": "Nov 2025 \u2013 Present", "description": "Architecting sophisticated, multi-brand, international commerce for the world's largest retailers. Liquid + Headless (Hydrogen), Shopify APIs, Functions and Extensibility (Checkout, Admin, Account), data modeling with Metafields and Metaobjects, CMS integrations, strategic technical solutioning." },
+            { "role": "Principal Platform Technical Architect", "company": "Accenture Song", "period": "Mar 2023 \u2013 Nov 2025", "description": "Led technical platform architecture for Shopify Plus and Shopify Enterprise. Partnered on pre-sales and solution advisory, translating business goals into technical architecture. Drove practice-wide improvements through reusable assets and architectural best practices." },
+            { "role": "Director of Technology, Architecture", "company": "The Stable (Accenture Song)", "period": "Jan 2022 \u2013 Mar 2023", "description": "Directed technical strategy and architecture for Shopify Plus commerce implementations. Delivered technical audits, architecture roadmaps, and platform modernization strategies for enterprise clients." },
+            { "role": "Director of Technology", "company": "ZEHNER", "period": "Mar 2018 \u2013 Jan 2022", "description": "Led end-to-end technology delivery across a portfolio of high-profile commerce and digital experience projects. Introduced modern frontend and backend frameworks and scalable engineering standards." },
+            { "role": "Tech Director", "company": "BLITZ", "period": "2009 \u2013 Mar 2018", "description": "8+ years at BLITZ, progressing from Software Developer to Tech Director. Shipped commerce and digital experience work across enterprise brands." },
+            { "role": "Web Developer / Designer", "company": "Deadline Advertising", "period": "Mar 2007 \u2013 Oct 2009" }
           ],
-          "skills": ["Liquid", "Hydrogen / Headless", "Checkout Extensibility", "Functions", "Shopify APIs", "Claude / AI", "Data Modeling"],
+          "skills": ["Liquid", "Hydrogen / Headless", "Checkout Extensibility", "Functions", "Shopify APIs", "Metafields / Metaobjects", "Data Modeling", "Enterprise Architecture"],
           "wins": [
             "Headless at Shopify for Developers \u2014 certified Sep 2025",
             "Solution Planning Fundamentals \u2014 certified Sep 2025",
-            "Demo2Win! \u2014 certified Mar 2026"
+            "Demo2Win! \u2014 certified Mar 2026",
+            "18+ years in commerce and digital experience engineering"
           ],
-          "slack": "U09SSUZCK0R",
-          "email": "aubrey.taylor@shopify.com"
+          "slack": "U09SSUZCK0R"
         }
       },
       { "name": "Christian Moore", "specialty": "Payments / Checkout / Subscriptions", "photo": "https://cdn.shopify.com/b/u2-files-production-bucket/glthbs5a7guygutaxmrh3kjt4ix9.webp", "location": "US \u00b7 CT (Central)" },
