@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SA-entral | Enterprise Solutions Architects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0B0F0D;
+      --bg-card: rgba(16, 24, 20, 0.7);
+      --bg-card-hover: rgba(20, 32, 26, 0.85);
+      --border: rgba(0, 200, 83, 0.12);
+      --border-hover: rgba(0, 200, 83, 0.3);
+      --green: #00C853;
+      --green-dim: rgba(0, 200, 83, 0.6);
+      --green-bg: rgba(0, 200, 83, 0.08);
+      --green-bg2: rgba(0, 200, 83, 0.15);
+      --white: #F0F0F0;
+      --white-dim: rgba(240, 240, 240, 0.7);
+      --white-muted: rgba(240, 240, 240, 0.4);
+      --coral: #FF6B6B;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      background-image:
+        linear-gradient(rgba(0, 200, 83, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 200, 83, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      background-attachment: fixed;
+      color: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+    .label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--green); margin-bottom: 16px;
+    }
+    .heading {
+      font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900;
+      line-height: 1.05; text-transform: uppercase;
+      letter-spacing: -0.02em; margin-bottom: 20px;
+    }
+    .heading em { font-style: italic; color: var(--green); }
+    .subtext {
+      font-size: 0.95rem; color: var(--white-dim);
+      max-width: 620px; line-height: 1.7;
+    }
+    hr { border: none; height: 1px; background: var(--border); margin: 0; }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(11, 15, 13, 0.8);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1140px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between; height: 60px;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 0.95rem; }
+    .nav-brand .badge {
+      background: var(--green); color: var(--bg);
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 0.6rem; font-weight: 800; letter-spacing: 0.1em;
+    }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a { font-size: 0.8rem; font-weight: 600; color: var(--white-muted); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: var(--green) !important; color: var(--bg) !important;
+      padding: 7px 16px !important; border-radius: 6px !important;
+      font-weight: 700 !important; font-size: 0.75rem !important;
+    }
+    .nav-cta:hover { opacity: 0.85 !important; }
+    .nav-edit { display: none; font-size: 0.75rem; font-weight: 600; color: var(--green); background: transparent; border: 1px solid var(--green); border-radius: 20px; padding: 5px 14px; cursor: pointer; transition: background 0.2s, color 0.2s; white-space: nowrap; }
+    .nav-edit:hover { background: var(--green); color: #000; }
+    .nav-edit.visible { display: inline-flex; align-items: center; gap: 6px; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+    .nav-toggle span { display: block; width: 20px; height: 2px; background: var(--white); margin: 4px 0; }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column; position: absolute;
+        top: 60px; left: 0; right: 0; background: var(--bg);
+        padding: 20px 24px; border-bottom: 1px solid var(--border); gap: 16px;
+      }
+      .nav-toggle { display: block; }
+    }
+
+    /* Hero */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 0 80px; position: relative; }
+    .hero::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 400px;
+      background: radial-gradient(ellipse at 50% 100%, rgba(0, 200, 83, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-content { max-width: 700px; }
+    .hero-applying {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--green);
+      background: var(--green-bg); border: 1px solid var(--border);
+      padding: 6px 14px; border-radius: 100px; margin-bottom: 32px;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 900;
+      line-height: 0.95; text-transform: uppercase; letter-spacing: -0.03em; margin-bottom: 24px;
+    }
+    .hero h1 em { display: block; color: var(--green); font-style: italic; }
+    .hero-role { font-size: 1rem; font-weight: 600; color: var(--white-dim); margin-bottom: 20px; }
+    .hero-role strong { color: var(--white); }
+    .hero-desc { font-size: 0.95rem; color: var(--white-muted); line-height: 1.8; max-width: 580px; margin-bottom: 32px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
+      border: 1px solid var(--border); transition: all 0.2s; cursor: pointer;
+    }
+    .btn-primary { background: var(--green); color: var(--bg); border-color: var(--green); }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-ghost { background: transparent; color: var(--white); }
+    .btn-ghost:hover { border-color: var(--border-hover); background: var(--green-bg); }
+    .scroll-hint {
+      text-align: center; margin-top: 60px;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--white-muted);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      animation: fadeIn 1s 1.2s ease both;
+    }
+    .scroll-hint::after {
+      content: '';
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--green), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.6) translateY(0); }
+      50% { opacity: 1; transform: scaleY(1) translateY(8px); }
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* Stats */
+    .stats-bar { padding: 48px 0; }
+    .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .stat-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px 20px;
+    }
+    .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--green); line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-size: 0.7rem; color: var(--white-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+    @media (max-width: 768px) { .stats-row { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+
+    .section { padding: 80px 0; }
+
+    /* Value */
+    .value-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; }
+    .value-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px 22px;
+      transition: border-color 0.3s, transform 0.3s, background 0.3s;
+    }
+    .value-card:hover { border-color: var(--border-hover); background: var(--bg-card-hover); transform: translateY(-3px); }
+    .value-card-icon { font-size: 1.6rem; margin-bottom: 16px; display: block; }
+    .value-card h3 { font-size: 0.95rem; font-weight: 800; margin-bottom: 8px; }
+    .value-card p { font-size: 0.82rem; color: var(--white-muted); line-height: 1.65; }
+    @media (max-width: 768px) { .value-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .value-grid { grid-template-columns: 1fr; } }
+
+    /* Disciplines */
+    .disc-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 40px; }
+    .disc-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px 18px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .disc-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+    .disc-card .emoji { font-size: 1.5rem; margin-bottom: 12px; display: block; }
+    .disc-card h3 { font-size: 0.9rem; font-weight: 800; color: var(--green); margin-bottom: 6px; }
+    .disc-card p { font-size: 0.75rem; color: var(--white-muted); line-height: 1.6; margin-bottom: 14px; }
+    .disc-sa { display: flex; align-items: center; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .disc-sa + .disc-sa { border-top: none; padding-top: 6px; }
+    .disc-avatar {
+      width: 26px; height: 26px; background: var(--green-bg2); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.55rem; font-weight: 800; color: var(--green); flex-shrink: 0;
+    }
+    .disc-photo {
+      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+      object-fit: cover; border: 1.5px solid var(--border);
+    }
+    .disc-sa-info { font-size: 0.75rem; color: var(--white-dim); font-weight: 500; }
+    .disc-sa-tz { font-size: 0.65rem; color: var(--white-muted); }
+    @media (max-width: 1024px) { .disc-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px) { .disc-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 400px) { .disc-grid { grid-template-columns: 1fr; } }
+
+    /* When */
+    .trigger-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+    .trigger-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 32px 24px; text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .trigger-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+    .trigger-icon {
+      width: 56px; height: 56px; background: var(--green-bg2);
+      border: 1px solid var(--border); border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin: 0 auto 20px;
+    }
+    .trigger-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
+    .trigger-card p { font-size: 0.85rem; color: var(--white-muted); line-height: 1.65; }
+    @media (max-width: 768px) { .trigger-grid { grid-template-columns: 1fr; max-width: 400px; } }
+
+    /* How */
+    .how-grid { display: grid; grid-template-columns: 1fr 40px 1fr; gap: 20px; align-items: start; margin-top: 40px; }
+    .how-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px 28px; transition: border-color 0.3s;
+    }
+    .how-card:hover { border-color: var(--border-hover); }
+    .how-video {
+      margin-top: 20px; border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--border); cursor: pointer; position: relative;
+    }
+    .how-video:hover { border-color: var(--border-hover); }
+    .how-video video {
+      width: 100%; display: block; border-radius: 10px;
+      image-rendering: -webkit-optimize-contrast;
+    }
+    .how-video-hint {
+      position: absolute; bottom: 10px; right: 10px;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      padding: 4px 10px; border-radius: 6px;
+      font-size: 0.6rem; font-weight: 600; color: var(--white-muted);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      pointer-events: none; transition: opacity 0.2s;
+    }
+    .how-video:hover .how-video-hint { opacity: 0; }
+
+    /* Video Modal */
+    .video-modal {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px);
+      align-items: center; justify-content: center; padding: 40px;
+    }
+    .video-modal.open { display: flex; }
+    .video-modal-inner {
+      max-width: 960px; width: 100%; position: relative;
+      animation: modalIn 0.3s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .video-modal-close {
+      position: absolute; top: -40px; right: 0;
+      background: none; border: none; color: var(--white-muted);
+      font-size: 0.8rem; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s;
+    }
+    .video-modal-close:hover { color: var(--white); }
+    .video-modal video {
+      width: 100%; border-radius: 14px;
+      border: 1px solid var(--border);
+      image-rendering: -webkit-optimize-contrast;
+    }
+    .video-modal-steps {
+      margin-top: 20px; display: grid;
+      grid-template-columns: repeat(5, 1fr); gap: 10px;
+    }
+    .video-modal-step {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 12px; text-align: center;
+    }
+    .video-modal-step-num {
+      width: 24px; height: 24px; margin: 0 auto 8px;
+      background: var(--green-bg2); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 800; color: var(--green);
+    }
+    .video-modal-step p {
+      font-size: 0.72rem; color: var(--white-dim); line-height: 1.5;
+    }
+    @media (max-width: 768px) {
+      .video-modal { padding: 20px; }
+      .video-modal-steps { grid-template-columns: 1fr; }
+    }
+
+    /* Profile Modal */
+    .profile-modal {
+      display: none; position: fixed; inset: 0; z-index: 210;
+      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px);
+      align-items: center; justify-content: center; padding: 40px;
+    }
+    .profile-modal.open { display: flex; }
+    .profile-inner {
+      max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto;
+      background: #111714; border: 1px solid var(--border);
+      border-radius: 18px; padding: 36px 32px;
+      animation: modalIn 0.3s ease;
+    }
+    .profile-inner::-webkit-scrollbar { width: 4px; }
+    .profile-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .profile-close {
+      position: absolute; top: 16px; right: 20px;
+      background: none; border: none; color: var(--white-muted);
+      font-size: 1.2rem; cursor: pointer; transition: color 0.2s; z-index: 1;
+    }
+    .profile-close:hover { color: var(--white); }
+    .profile-header { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; }
+    .profile-photo {
+      width: 80px; height: 80px; border-radius: 50%;
+      object-fit: cover; border: 2px solid var(--border); flex-shrink: 0;
+    }
+    .profile-name { font-size: 1.3rem; font-weight: 900; }
+    .profile-title { font-size: 0.8rem; color: var(--green); margin-top: 2px; }
+    .profile-meta { font-size: 0.7rem; color: var(--white-muted); margin-top: 4px; line-height: 1.6; }
+    .profile-section-label {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--green-dim);
+      margin-top: 24px; margin-bottom: 12px; padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .profile-career { display: flex; flex-direction: column; gap: 12px; }
+    .profile-career-item { display: flex; gap: 12px; align-items: flex-start; }
+    .profile-career-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0; margin-top: 6px;
+    }
+    .profile-career-dot.past { background: var(--border); }
+    .profile-career-role { font-size: 0.85rem; font-weight: 700; }
+    .profile-career-co { font-size: 0.75rem; color: var(--white-muted); }
+    .profile-career-desc { font-size: 0.72rem; color: var(--white-muted); margin-top: 2px; }
+    .profile-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .profile-skill {
+      padding: 4px 12px; border-radius: 100px; font-size: 0.65rem; font-weight: 600;
+      background: var(--green-bg2); color: var(--green); border: 1px solid var(--border);
+    }
+    .profile-wins { display: flex; flex-direction: column; gap: 8px; }
+    .profile-win {
+      font-size: 0.8rem; color: var(--white-dim); padding-left: 16px;
+      position: relative; line-height: 1.5;
+    }
+    .profile-win::before {
+      content: '\u2022'; position: absolute; left: 0; color: var(--green);
+    }
+    .profile-contact {
+      display: flex; gap: 10px; margin-top: 24px; padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .profile-contact a {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 8px; font-size: 0.7rem; font-weight: 600;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--white-dim); transition: border-color 0.2s, color 0.2s;
+    }
+    .profile-contact a:hover { border-color: var(--border-hover); color: var(--green); }
+    .has-profile { cursor: pointer; }
+    .has-profile:hover { border-color: var(--green) !important; }
+
+    /* ── Edit panel ── */
+    .edit-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: flex-end; }
+    .edit-modal.open { display: flex; }
+    .edit-inner { background: #0b0f0d; border-left: 1px solid var(--border); width: 100%; max-width: 420px; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; animation: slideIn 0.25s ease; }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    .edit-inner::-webkit-scrollbar { width: 4px; }
+    .edit-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .edit-header { position: sticky; top: 0; background: #0a120d; border-bottom: 1px solid var(--border); padding: 16px 20px; display: flex; align-items: center; gap: 12px; z-index: 1; }
+    .edit-header-photo { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); flex-shrink: 0; }
+    .edit-header-name { font-size: 0.85rem; font-weight: 900; flex: 1; }
+    .edit-header-sub { font-size: 0.62rem; color: var(--white-muted); margin-top: 1px; }
+    .edit-admin-label { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); margin-bottom: 5px; }
+    .edit-admin-select { width: 100%; background: rgba(16,24,20,0.7); border: 1px solid var(--border); color: var(--white); border-radius: 6px; padding: 6px 10px; font-size: 0.75rem; font-family: var(--font); cursor: pointer; outline: none; }
+    .edit-admin-select:focus { border-color: var(--green); }
+    .edit-close { background: none; border: none; color: var(--white-muted); font-size: 1.4rem; cursor: pointer; line-height: 1; padding: 0; }
+    .edit-close:hover { color: var(--white); }
+    .edit-body { padding: 20px; display: flex; flex-direction: column; gap: 24px; flex: 1; }
+    .edit-section-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
+    .edit-card { background: rgba(16,24,20,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: flex-start; }
+    .edit-card-body { flex: 1; }
+    .edit-card-role { font-size: 0.8rem; font-weight: 700; }
+    .edit-card-sub { font-size: 0.68rem; color: var(--white-muted); margin-top: 2px; }
+    .edit-remove { background: none; border: none; color: var(--border); font-size: 1rem; cursor: pointer; padding: 0; flex-shrink: 0; line-height: 1; transition: color 0.15s; }
+    .edit-remove:hover { color: var(--coral); }
+    .edit-add-form { background: rgba(16,24,20,0.5); border: 1px dashed var(--border-hover); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .edit-input { background: transparent; border: none; border-bottom: 1px solid var(--border); color: var(--white); font-size: 0.78rem; padding: 4px 0; outline: none; width: 100%; font-family: var(--font); }
+    .edit-input::placeholder { color: var(--white-muted); }
+    .edit-input:focus { border-bottom-color: var(--green); }
+    .edit-input-row { display: flex; gap: 8px; }
+    .edit-input-row .edit-input:last-child { width: 100px; flex-shrink: 0; }
+    .edit-add-btn { align-self: flex-end; background: transparent; border: 1px solid var(--border); color: var(--white-muted); border-radius: 6px; padding: 4px 12px; font-size: 0.68rem; cursor: pointer; font-family: var(--font); transition: border-color 0.15s, color 0.15s; }
+    .edit-add-btn:hover { border-color: var(--green); color: var(--green); }
+    .edit-skill-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .edit-skill-pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--green); color: var(--green); border-radius: 20px; padding: 3px 10px; font-size: 0.7rem; }
+    .edit-skill-remove { background: none; border: none; color: var(--green-dim); cursor: pointer; font-size: 0.85rem; line-height: 1; padding: 0; }
+    .edit-skill-remove:hover { color: var(--coral); }
+    .edit-skill-row { display: flex; gap: 8px; align-items: center; }
+    .edit-skill-row .edit-input { flex: 1; }
+    .edit-wins-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+    .edit-win-card { background: rgba(16,24,20,0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: flex-start; }
+    .edit-win-body { flex: 1; }
+    .edit-win-brand { font-size: 0.8rem; font-weight: 700; color: var(--green); margin-bottom: 5px; }
+    .edit-win-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .edit-win-tag { font-size: 0.6rem; background: var(--green-bg); color: var(--white-muted); border-radius: 4px; padding: 2px 7px; }
+    .disc-picker { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+    .disc-tag { font-size: 0.65rem; border: 1px solid var(--border); color: var(--white-muted); border-radius: 4px; padding: 3px 9px; cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s; user-select: none; }
+    .disc-tag.active { border-color: var(--green); color: var(--green); background: var(--green-bg); }
+    .disc-tag.custom { display: inline-flex; align-items: center; gap: 5px; }
+    .disc-tag-remove { background: none; border: none; color: var(--green-dim); cursor: pointer; font-size: 0.8rem; line-height: 1; padding: 0; }
+    .disc-tag-remove:hover { color: var(--coral); }
+    .disc-custom-row { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+    .disc-custom-row .edit-input { flex: 1; font-size: 0.68rem; }
+    .disc-hint { font-size: 0.58rem; color: var(--border-hover); margin-top: 4px; }
+    .edit-save-status { display: flex; align-items: center; gap: 6px; font-size: 0.62rem; color: var(--white-muted); padding: 12px 20px; border-top: 1px solid var(--border); position: sticky; bottom: 0; background: #0b0f0d; }
+    .edit-save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    @media (max-width: 640px) { .edit-inner { max-width: 100%; } }
+
+    @media (max-width: 768px) {
+      .profile-modal { padding: 16px; }
+      .profile-inner { padding: 28px 20px; }
+    }
+
+    .how-badge {
+      display: inline-block; padding: 4px 10px; border-radius: 100px;
+      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 16px;
+    }
+    .how-badge-green { background: var(--green-bg2); color: var(--green); }
+    .how-badge-coral { background: rgba(255, 107, 107, 0.15); color: var(--coral); }
+    .how-card h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
+    .how-card > p { font-size: 0.85rem; color: var(--white-muted); line-height: 1.65; margin-bottom: 20px; }
+    .how-steps { display: flex; flex-direction: column; gap: 14px; }
+    .how-step { display: flex; gap: 12px; align-items: flex-start; }
+    .how-step-num {
+      min-width: 26px; height: 26px; background: var(--green-bg2); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 800; color: var(--green); flex-shrink: 0; margin-top: 1px;
+    }
+    .how-step p { font-size: 0.85rem; color: var(--white-dim); }
+    .how-step strong { color: var(--white); }
+    .how-or { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 60px; color: var(--white-muted); }
+    .how-or-line { width: 1px; height: 50px; background: var(--border); }
+    .how-or span { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; }
+    @media (max-width: 768px) {
+      .how-grid { grid-template-columns: 1fr; }
+      .how-or { flex-direction: row; padding: 0; }
+      .how-or-line { width: 40px; height: 1px; }
+    }
+
+    /* Rules */
+    .rules-split { display: grid; grid-template-columns: 1fr 1fr; }
+    .rules-col { padding: 80px 48px; }
+    .rules-do { background: rgba(0, 200, 83, 0.04); border-right: 1px solid var(--border); }
+    .rules-dont { background: rgba(255, 107, 107, 0.03); }
+    .rules-col-inner { max-width: 440px; margin: 0 auto; }
+    .rules-col h2 {
+      font-size: clamp(2.5rem, 4vw, 4rem); font-weight: 900;
+      text-transform: uppercase; line-height: 1; margin-bottom: 40px;
+    }
+    .rules-do h2 { color: var(--green); }
+    .rules-dont h2 { color: var(--coral); }
+    .rules-list { display: flex; flex-direction: column; gap: 24px; }
+    .rules-item { display: flex; gap: 14px; align-items: flex-start; }
+    .rules-icon {
+      min-width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; flex-shrink: 0; margin-top: 2px;
+    }
+    .rules-do .rules-icon { background: var(--green-bg2); color: var(--green); }
+    .rules-dont .rules-icon { background: rgba(255, 107, 107, 0.15); color: var(--coral); }
+    .rules-item p { font-size: 0.9rem; color: var(--white-dim); line-height: 1.7; }
+    @media (max-width: 768px) {
+      .rules-split { grid-template-columns: 1fr; }
+      .rules-col { padding: 60px 24px; }
+      .rules-do { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+
+    /* Examples */
+    .ex-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+    .ex-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .ex-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+    .ex-tags {
+      padding: 14px 18px; background: rgba(0, 200, 83, 0.06);
+      border-bottom: 1px solid var(--border); display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .ex-tag {
+      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; padding: 3px 10px;
+      border-radius: 100px; background: var(--green-bg2); color: var(--green);
+    }
+    .ex-body { padding: 22px 18px; }
+    .ex-card h3 { font-size: 0.95rem; font-weight: 800; margin-bottom: 8px; }
+    .ex-card p { font-size: 0.82rem; color: var(--white-muted); line-height: 1.65; }
+    @media (max-width: 768px) { .ex-grid { grid-template-columns: 1fr; } }
+
+    /* Resources */
+    .res-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+    .res-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px 22px;
+      transition: border-color 0.3s, transform 0.3s; display: flex; flex-direction: column;
+    }
+    .res-card:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+    .res-icon {
+      width: 48px; height: 48px; background: var(--green-bg2); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 18px;
+    }
+    .res-card h3 { font-size: 0.95rem; font-weight: 800; margin-bottom: 8px; }
+    .res-card p { font-size: 0.82rem; color: var(--white-muted); line-height: 1.65; margin-bottom: 16px; }
+    .res-link {
+      font-size: 0.75rem; font-weight: 700; color: var(--green);
+      display: inline-flex; align-items: center; gap: 4px; margin-top: auto; transition: gap 0.2s;
+    }
+    .res-card:hover .res-link { gap: 8px; }
+    @media (max-width: 768px) { .res-grid { grid-template-columns: 1fr; max-width: 400px; } }
+
+    /* Leadership */
+    .lead-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 40px; max-width: 700px; margin-left: auto; margin-right: auto; }
+    .lead-card {
+      position: relative;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      display: flex; align-items: center; gap: 20px;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .lead-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+    .lead-card > div:last-child { padding-right: 54px; flex: 1; min-width: 0; }
+    .lead-photo {
+      width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
+      object-fit: cover; border: 2px solid var(--border);
+    }
+    .lead-name { font-size: 1.05rem; font-weight: 800; }
+    .lead-title { font-size: 0.8rem; color: var(--green); margin-top: 2px; }
+    .lead-region { font-size: 0.7rem; color: var(--white-muted); margin-top: 2px; }
+    .lead-badge {
+      display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 100px;
+      font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+      background: var(--green-bg2); color: var(--green);
+    }
+    @media (max-width: 640px) { .lead-grid { grid-template-columns: 1fr; } }
+
+    /* Team */
+    .team-region-label {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--green-dim); margin-top: 32px; margin-bottom: 12px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+    .team-region-label:first-of-type { margin-top: 40px; }
+    .team-region-label { max-width: 960px; margin-left: auto; margin-right: auto; }
+    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 960px; margin-left: auto; margin-right: auto; }
+    .team-card {
+      position: relative;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 14px;
+      display: flex; align-items: center; gap: 14px;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .team-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+    .team-photo {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      object-fit: cover; border: 2px solid var(--border);
+    }
+    .team-card > div { min-width: 0; padding-right: 44px; flex: 1; }
+    .team-name { font-size: 0.85rem; font-weight: 700; }
+    .team-spec { font-size: 0.72rem; color: var(--green); }
+    .team-tz { font-size: 0.62rem; color: var(--white-muted); margin-top: 1px; }
+
+    /* Slack DM icon on team/lead cards — vertically centered */
+    .card-slack {
+      position: absolute; top: 50%; right: 12px;
+      transform: translateY(-50%);
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent;
+      border: 1px solid transparent;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      text-decoration: none;
+      z-index: 2;
+    }
+    .card-slack:hover {
+      background: var(--green-bg2);
+      border-color: var(--border-hover);
+      transform: translateY(-50%) scale(1.08);
+    }
+    .card-slack svg { width: 18px; height: 18px; display: block; }
+    .lead-card .card-slack { right: 16px; width: 38px; height: 38px; }
+    .lead-card .card-slack svg { width: 22px; height: 22px; }
+    @media (max-width: 768px) { .team-grid { grid-template-columns: 1fr 1fr; } .lead-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) { .team-grid { grid-template-columns: 1fr; } }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 40px 0; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-brand { display: flex; align-items: center; gap: 8px; }
+    .footer-brand strong { font-size: 0.85rem; }
+    .footer-brand span { font-size: 0.75rem; color: var(--white-muted); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 0.75rem; color: var(--white-muted); font-weight: 500; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--green); }
+    .footer-date { font-size: 0.7rem; color: var(--white-muted); }
+  </style>
+  <script src="/client/quick.js"></script>
+</head>
+<body>
+
+  <!-- Nav (static — not data-driven) -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">SA-entral <span class="badge">ENTERPRISE</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+      <div class="nav-links" id="navLinks">
+        <a href="#value">Value</a>
+        <a href="#team">Team</a>
+        <a href="#disciplines">Disciplines</a>
+        <a href="#when">When</a>
+        <a href="#how">How</a>
+        <a href="#rules">DOs &amp; DON'Ts</a>
+        <a href="#resources">Resources</a>
+        <a href="#how" class="nav-cta">Request an SA</a>
+      </div>
+      <button class="nav-edit" id="navEditBtn" onclick="openEditPanel()">✏️ Edit My Profile</button>
+    </div>
+  </nav>
+
+  <!-- Sections — rendered from quick.db -->
+  <section class="hero" id="hero"><div class="container"><div id="heroContent" class="hero-content"></div><div class="scroll-hint">Scroll</div></div></section>
+  <section class="stats-bar"><div class="container"><div id="statsRow" class="stats-row reveal"></div></div></section>
+  <hr>
+  <section class="section" id="value"><div class="container" id="valueSection"></div></section>
+  <hr>
+  <section class="section" id="team"><div class="container" id="teamSection"></div></section>
+  <hr>
+  <section class="section" id="disciplines"><div class="container" id="discSection"></div></section>
+  <hr>
+  <section class="section" id="when"><div class="container" id="whenSection"></div></section>
+  <hr>
+  <section class="section" id="how"><div class="container" id="howSection"></div></section>
+  <section id="rules"><div id="rulesSection"></div></section>
+  <hr>
+  <section class="section" id="examples"><div class="container" id="exSection"></div></section>
+  <hr>
+  <section class="section" id="resources"><div class="container" id="resSection"></div></section>
+
+  <!-- Video Modal -->
+  <div class="video-modal" id="videoModal">
+    <div class="video-modal-inner">
+      <button class="video-modal-close" id="videoModalClose">&times; Close</button>
+      <video id="videoModalPlayer" autoplay loop muted playsinline></video>
+      <div class="video-modal-steps" id="videoModalSteps"></div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="profile-modal" id="profileModal">
+    <div class="profile-inner" id="profileInner">
+      <button class="profile-close" id="profileClose">&times;</button>
+      <div id="profileContent"></div>
+    </div>
+  </div>
+
+  <!-- Edit Panel -->
+  <div class="edit-modal" id="editModal">
+    <div class="edit-inner">
+      <div class="edit-header">
+        <img class="edit-header-photo" id="editHeaderPhoto" src="" alt="">
+        <div>
+          <div class="edit-header-name" id="editHeaderName"></div>
+          <div class="edit-header-sub">Changes save automatically</div>
+        </div>
+        <button class="edit-close" onclick="closeEditPanel()">&times;</button>
+      </div>
+      <div id="editAdminPicker" style="display:none;padding:10px 20px;border-bottom:1px solid var(--border);background:#0a120d;"></div>
+      <div class="edit-body" id="editBody"></div>
+      <div class="edit-save-status"><div class="edit-save-dot"></div>All changes saved automatically</div>
+    </div>
+  </div>
+
+  <!-- Footer (static) -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand"><strong>SA-entral</strong><span>&middot; Enterprise Solutions Architecture</span></div>
+        <div class="footer-links">
+          <a href="#">#ask-an-architect</a>
+          <a href="https://docs.google.com/presentation/d/17yJhuugog3MWpYS04qrjPDV5Ck36sSzqzmxLqfizoCg" target="_blank">Source Deck</a>
+        </div>
+        <div class="footer-date">Updated April 2026</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Fetch data from quick.db and render ──
+    (async () => {
+      try {
+        const [[config], allPeople] = await Promise.all([
+          quick.db.collection('site_config').find(),
+          quick.db.collection('people').find()
+        ]);
+
+        // Store globally for admin panel use
+        window._allPeople = allPeople;
+
+        // Build leadership / team shape — NORAM Lead always first
+        const LEADERSHIP_ORDER = ['NORAM Lead', 'EMEA Lead'];
+        const leadership = allPeople
+          .filter(p => p.region === 'leadership')
+          .sort((a, b) => LEADERSHIP_ORDER.indexOf(a.badge) - LEADERSHIP_ORDER.indexOf(b.badge));
+        const team = {
+          noram: allPeople.filter(p => p.region === 'noram'),
+          emea:  allPeople.filter(p => p.region === 'emea')
+        };
+
+        // Build global profile lookup by full name and short name
+        window._profiles = {};
+        allPeople.forEach(p => {
+          window._profiles[p.name] = p;
+          const parts = p.name.split(' ');
+          if (parts.length === 2) {
+            window._profiles[parts[0] + ' ' + parts[1][0] + '.'] = p;
+          } else if (parts.length >= 3) {
+            const initials = parts.slice(1).map(w => w[0]).join('.') + '.';
+            window._profiles[parts[0] + ' ' + initials] = p;
+          }
+        });
+
+        // Resolve discipline member references from slackId lists to person objects
+        config.disciplines = config.disciplines.map(d => ({
+          ...d,
+          members: (d.memberSlackIds || []).map(id => allPeople.find(p => p.slackId === id)).filter(Boolean)
+        }));
+
+        document.title = 'SA-entral | Enterprise Solutions Architects';
+        renderHero(config.hero);
+        renderStats(config.stats);
+        renderValue(config.valuePillars);
+        renderTeam(leadership, team);
+        renderDisciplines(config.disciplines);
+        renderTriggers(config.triggers);
+        renderHow(config.engagementPaths);
+        renderRules(config.rules);
+        renderExamples(config.examples);
+        renderResources(config.resources);
+        initAnimations();
+        initIdentity(allPeople);
+      } catch (err) {
+        console.error(err);
+        document.getElementById('heroContent').innerHTML =
+          `<h1 style="font-size:2rem;margin-top:40px">Failed to load data</h1><p class="hero-desc">Check the console for details.</p>`;
+      }
+    })();
+
+    // ── Identity & edit access ──
+    const ADMIN_SLACK_IDS = ['U03L3D490F9', 'U09H7GYPVRV'];
+
+    async function initIdentity(allPeople) {
+      try {
+        const user = await quick.id.waitForUser();
+        const match = allPeople.find(p => p.slackId === user.slackId);
+        if (!match) return;
+        window._currentUser = match;
+        window._isAdmin = ADMIN_SLACK_IDS.includes(match.slackId);
+        document.getElementById('navEditBtn').classList.add('visible');
+      } catch (e) {
+        // Not on Quick or identity unavailable — edit button stays hidden
+      }
+    }
+
+    function esc(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── Edit panel ──
+    function openEditPanel() {
+      const p = window._currentUser;
+      if (!p) return;
+      window._editTarget = p;
+      document.getElementById('editHeaderPhoto').src = p.photo || '';
+      document.getElementById('editHeaderName').textContent = p.name;
+
+      const pickerEl = document.getElementById('editAdminPicker');
+      if (window._isAdmin) {
+        pickerEl.style.display = 'block';
+        const options = (window._allPeople || [])
+          .slice()
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map(person => `<option value="${esc(person.id)}"${person.id === p.id ? ' selected' : ''}>${esc(person.name)}</option>`)
+          .join('');
+        pickerEl.innerHTML = `
+          <div class="edit-admin-label">Editing profile for</div>
+          <select class="edit-admin-select" id="editPersonSelect">${options}</select>`;
+        document.getElementById('editPersonSelect').addEventListener('change', e => {
+          const target = (window._allPeople || []).find(person => person.id === e.target.value);
+          if (!target) return;
+          window._editTarget = target;
+          document.getElementById('editHeaderPhoto').src = target.photo || '';
+          document.getElementById('editHeaderName').textContent = target.name;
+          renderEditBody();
+        });
+      } else {
+        pickerEl.style.display = 'none';
+      }
+
+      renderEditBody();
+      document.getElementById('editModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditPanel() {
+      document.getElementById('editModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('editModal').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeEditPanel();
+    });
+
+    async function saveCurrentUser(patch) {
+      const target = window._editTarget;
+      Object.assign(target, patch);
+      await quick.db.collection('people').update(target.id, patch);
+      window._profiles[target.name] = target;
+    }
+
+    function renderEditBody() {
+      const p = window._editTarget;
+      document.getElementById('editBody').innerHTML = `
+        ${renderCareerEdit(p)}
+        ${renderSkillsEdit(p)}
+        ${renderWinsEdit(p)}
+      `;
+      bindCareerEvents();
+      bindSkillsEvents();
+      bindWinsEvents();
+    }
+
+    // ── Career ──
+    function renderCareerEdit(p) {
+      const cards = (p.career || []).map((c, i) => `
+        <div class="edit-card" data-career-index="${i}">
+          <div class="edit-card-body">
+            <div class="edit-card-role">${esc(c.role)}</div>
+            <div class="edit-card-sub">${esc(c.company)} · ${esc(c.period)}</div>
+          </div>
+          <button class="edit-remove" data-remove-career="${i}" title="Remove">✕</button>
+        </div>`).join('');
+
+      return `
+        <div>
+          <div class="edit-section-label">Career</div>
+          <div id="careerList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">${cards}</div>
+          <div class="edit-add-form">
+            <input class="edit-input" id="careerRole" placeholder="Role title">
+            <div class="edit-input-row">
+              <input class="edit-input" id="careerCompany" placeholder="Company">
+              <input class="edit-input" id="careerPeriod" placeholder="2020 – 2022">
+            </div>
+            <button class="edit-add-btn" id="careerAddBtn">+ Add role</button>
+          </div>
+        </div>`;
+    }
+
+    function bindCareerEvents() {
+      document.querySelectorAll('[data-remove-career]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const i = parseInt(btn.dataset.removeCareer);
+          const career = [...window._editTarget.career];
+          career.splice(i, 1);
+          await saveCurrentUser({ career });
+          renderEditBody();
+        });
+      });
+
+      document.getElementById('careerAddBtn').addEventListener('click', async () => {
+        const role    = document.getElementById('careerRole').value.trim();
+        const company = document.getElementById('careerCompany').value.trim();
+        const period  = document.getElementById('careerPeriod').value.trim();
+        if (!role || !company) return;
+        const career = [{ role, company, period }, ...(window._editTarget.career || [])];
+        await saveCurrentUser({ career });
+        renderEditBody();
+      });
+
+      document.getElementById('careerRole').addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('careerAddBtn').click();
+      });
+    }
+
+    // ── Skills ──
+    function renderSkillsEdit(p) {
+      const pills = (p.skills || []).map((s, i) => `
+        <span class="edit-skill-pill">
+          ${esc(s)}
+          <button class="edit-skill-remove" data-remove-skill="${i}" title="Remove">✕</button>
+        </span>`).join('');
+
+      return `
+        <div>
+          <div class="edit-section-label">Skills</div>
+          <div class="edit-skill-list" id="skillList">${pills}</div>
+          <div class="edit-add-form">
+            <div class="edit-skill-row">
+              <input class="edit-input" id="skillInput" placeholder="Add a skill…">
+              <button class="edit-add-btn" id="skillAddBtn">+ Add</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function bindSkillsEvents() {
+      document.querySelectorAll('[data-remove-skill]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const i = parseInt(btn.dataset.removeSkill);
+          const skills = [...window._editTarget.skills];
+          skills.splice(i, 1);
+          await saveCurrentUser({ skills });
+          renderEditBody();
+        });
+      });
+
+      async function addSkill() {
+        const val = document.getElementById('skillInput').value.trim();
+        if (!val) return;
+        const skills = [...(window._editTarget.skills || []), val];
+        await saveCurrentUser({ skills });
+        renderEditBody();
+      }
+
+      document.getElementById('skillAddBtn').addEventListener('click', addSkill);
+      document.getElementById('skillInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') addSkill();
+      });
+    }
+
+    // ── Notable Deal Wins ──
+    const PRESET_DISCIPLINES = ['Storefronts','Checkout & Extensibility','Retail','Payments','Security & Infrastructure','AI'];
+
+    function getCustomDisciplines() {
+      const all = (window._editTarget.wins || []).flatMap(w => w.disciplines || []);
+      return [...new Set(all.filter(d => !PRESET_DISCIPLINES.includes(d)))];
+    }
+
+    function renderWinsEdit(p) {
+      const cards = (p.wins || []).map((w, i) => `
+        <div class="edit-win-card">
+          <div class="edit-win-body">
+            <div class="edit-win-brand">${w.url ? `<a href="${esc(w.url)}" target="_blank" rel="noopener">${esc(w.brand)} ↗</a>` : esc(w.brand)}</div>
+            <div class="edit-win-tags">${(w.disciplines || []).map(d => `<span class="edit-win-tag">${esc(d)}</span>`).join('')}</div>
+          </div>
+          <button class="edit-remove" data-remove-win="${i}" title="Remove">✕</button>
+        </div>`).join('');
+
+      const customDiscs = getCustomDisciplines();
+      const allDiscs = [...PRESET_DISCIPLINES, ...customDiscs];
+      const pickerTags = allDiscs.map(d => {
+        const isCustom = !PRESET_DISCIPLINES.includes(d);
+        return `<span class="disc-tag${isCustom ? ' custom' : ''}" data-disc="${esc(d)}">
+          ${esc(d)}
+          ${isCustom ? `<button class="disc-tag-remove" data-remove-disc="${esc(d)}" title="Remove custom">✕</button>` : ''}
+        </span>`;
+      }).join('');
+
+      return `
+        <div>
+          <div class="edit-section-label">Notable Deal Wins</div>
+          <div class="edit-wins-list" id="winsList">${cards}</div>
+          <div class="edit-add-form">
+            <input class="edit-input" id="winBrand" placeholder="Brand name">
+            <input class="edit-input" id="winUrl" placeholder="Website URL (e.g. gymshark.com)">
+            <div class="edit-section-label" style="margin-top:6px;margin-bottom:4px">Disciplines</div>
+            <div class="disc-picker" id="discPicker">${pickerTags}</div>
+            <div class="disc-custom-row">
+              <input class="edit-input" id="discCustomInput" placeholder="Add custom discipline…">
+              <button class="edit-add-btn" id="discCustomAddBtn">+ Add</button>
+            </div>
+            <div class="disc-hint">Press Enter or click Add for custom disciplines</div>
+            <button class="edit-add-btn" id="winAddBtn" style="margin-top:10px;align-self:flex-end">+ Add win</button>
+          </div>
+        </div>`;
+    }
+
+    function bindWinsEvents() {
+      document.querySelectorAll('[data-remove-win]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const i = parseInt(btn.dataset.removeWin);
+          const wins = [...window._editTarget.wins];
+          wins.splice(i, 1);
+          await saveCurrentUser({ wins });
+          renderEditBody();
+        });
+      });
+
+      document.querySelectorAll('.disc-tag').forEach(tag => {
+        tag.addEventListener('click', e => {
+          if (e.target.classList.contains('disc-tag-remove')) return;
+          tag.classList.toggle('active');
+        });
+      });
+
+      document.querySelectorAll('[data-remove-disc]').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          e.stopPropagation();
+          const disc = btn.dataset.removeDisc;
+          const wins = window._editTarget.wins.map(w => ({
+            ...w,
+            disciplines: (w.disciplines || []).filter(d => d !== disc)
+          }));
+          await saveCurrentUser({ wins });
+          renderEditBody();
+        });
+      });
+
+      function addCustomDisc() {
+        const val = document.getElementById('discCustomInput').value.trim();
+        if (!val || PRESET_DISCIPLINES.includes(val)) return;
+        const picker = document.getElementById('discPicker');
+        if (Array.from(picker.querySelectorAll('.disc-tag')).some(t => t.dataset.disc === val)) {
+          document.getElementById('discCustomInput').value = '';
+          return;
+        }
+        const tag = document.createElement('span');
+        tag.className = 'disc-tag custom active';
+        tag.dataset.disc = val;
+        tag.innerHTML = `${esc(val)}<button class="disc-tag-remove" title="Remove custom">✕</button>`;
+        tag.addEventListener('click', e => {
+          if (e.target.classList.contains('disc-tag-remove')) { tag.remove(); return; }
+          tag.classList.toggle('active');
+        });
+        picker.appendChild(tag);
+        document.getElementById('discCustomInput').value = '';
+      }
+
+      document.getElementById('discCustomAddBtn').addEventListener('click', addCustomDisc);
+      document.getElementById('discCustomInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') addCustomDisc();
+      });
+
+      document.getElementById('winAddBtn').addEventListener('click', async () => {
+        const brand = document.getElementById('winBrand').value.trim();
+        const rawUrl = document.getElementById('winUrl').value.trim();
+        if (!brand) return;
+        const url = rawUrl && !rawUrl.startsWith('http') ? 'https://' + rawUrl : rawUrl;
+        const disciplines = [...document.querySelectorAll('.disc-tag.active')].map(t => t.dataset.disc);
+        const wins = [...(window._editTarget.wins || []), { brand, url, disciplines }];
+        await saveCurrentUser({ wins });
+        renderEditBody();
+      });
+    }
+
+    function renderHero(h) {
+      document.getElementById('heroContent').innerHTML = `
+        <div class="hero-applying">${h.badge}</div>
+        <h1>${h.title}<em>${h.titleEmphasis}</em></h1>
+        <p class="hero-role"><strong>${h.subtitle}</strong></p>
+        <p class="hero-desc">${h.description}</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="#how" class="btn btn-primary">\u26a1 Request an SA</a>
+          <a href="#when" class="btn btn-ghost">\u25cc When to engage?</a>
+        </div>`;
+    }
+
+    function renderStats(stats) {
+      document.getElementById('statsRow').innerHTML = stats.map(s =>
+        `<div class="stat-card"><div class="stat-num"${s.isEmoji || s.isSymbol ? '' : ' data-countup'}>${s.value}</div><div class="stat-label">${s.label}</div></div>`
+      ).join('');
+    }
+
+    function renderValue(pillars) {
+      const delays = ['', ' d1', ' d2', ' d3'];
+      document.getElementById('valueSection').innerHTML = `
+        <div class="label reveal">What We Do</div>
+        <h2 class="heading reveal d1">The value <em>we bring.</em></h2>
+        <p class="subtext reveal d2">Four pillars that define how Solutions Architects elevate enterprise engagements.</p>
+        <div class="value-grid">${pillars.map((p, i) => `
+          <div class="value-card reveal${delays[i] || ''}">
+            <span class="value-card-icon">${p.icon}</span>
+            <h3>${p.title}</h3>
+            <p>${p.description}</p>
+          </div>`).join('')}
+        </div>`;
+    }
+
+    function renderDisciplines(discs) {
+      const delays = ['', ' d1', ' d2', ' d3', ' d4', ' d4'];
+      document.getElementById('discSection').innerHTML = `
+        <div class="label reveal">Specializations</div>
+        <h2 class="heading reveal d1">Our <em>disciplines.</em></h2>
+        <p class="subtext reveal d2">Each SA specializes in specific technical domains, ensuring deep expertise where it matters most.</p>
+        <div class="disc-grid">${discs.map((d, i) => `
+          <div class="disc-card reveal${delays[i] || ''}">
+            <span class="emoji">${d.icon}</span>
+            <h3>${d.name}</h3>
+            <p>${d.description}</p>
+            ${d.members.map((m, mi) => {
+              const clickable = window._profiles[m.name] ? ' has-profile" data-profile="' + m.name + '"' : '"';
+              const styleAttr = mi > 0 ? ' style="border-top:none;padding-top:6px"' : '';
+              const avatar = m.photo
+                ? `<img class="disc-photo" src="${m.photo}" alt="${m.name}">`
+                : `<div class="disc-avatar">${m.initials || m.name.split(' ').map(w=>w[0]).join('')}</div>`;
+              return `<div class="disc-sa${clickable}${styleAttr}>
+                ${avatar}
+                <div><div class="disc-sa-info">${m.name}</div><div class="disc-sa-tz">${m.location}</div></div>
+              </div>`;
+            }).join('')}
+          </div>`).join('')}
+        </div>`;
+    }
+
+    function renderTriggers(triggers) {
+      const delays = ['', ' d1', ' d2'];
+      document.getElementById('whenSection').innerHTML = `
+        <div class="label reveal">Decision Guide</div>
+        <h2 class="heading reveal d1">When to <em>engage.</em></h2>
+        <p class="subtext reveal d2">Three signals that it's time to bring in a Solutions Architect.</p>
+        <div class="trigger-grid">${triggers.map((t, i) => `
+          <div class="trigger-card reveal${delays[i] || ''}">
+            <div class="trigger-icon">${t.icon}</div>
+            <h3>${t.title}</h3>
+            <p>${t.description}</p>
+          </div>`).join('')}
+        </div>`;
+    }
+
+    function renderHow(paths) {
+      document.getElementById('howSection').innerHTML = `
+        <div class="label reveal">Two Paths</div>
+        <h2 class="heading reveal d1">How to <em>engage.</em></h2>
+        <p class="subtext reveal d2">Choose the right engagement model for your need.</p>
+        <div class="how-grid">
+          ${paths.map((p, i) => {
+            const card = `<div class="how-card reveal${i > 0 ? ' d2' : ''}">
+              <span class="how-badge how-badge-${p.badgeType}">${p.badge}</span>
+              <h3>${p.title}</h3>
+              <p>${p.description}</p>
+              <div class="how-steps">${p.steps.map((s, si) => `
+                <div class="how-step"><div class="how-step-num">${si+1}</div><p>${s}</p></div>`).join('')}
+              </div>
+              ${p.video ? `<div class="how-video" onclick="openVideoModal('${p.video}', ${JSON.stringify(p.videoSteps || []).replace(/"/g, '&quot;')})"><video src="${p.video}" autoplay loop muted playsinline></video><div class="how-video-hint">Click to expand</div></div>` : ''}
+            </div>`;
+            if (i === 0) return card + `<div class="how-or reveal d1"><div class="how-or-line"></div><span>or</span><div class="how-or-line"></div></div>`;
+            return card;
+          }).join('')}
+        </div>`;
+    }
+
+    function renderRules(rules) {
+      document.getElementById('rulesSection').innerHTML = `
+        <div class="rules-split">
+          <div class="rules-col rules-do"><div class="rules-col-inner reveal">
+            <h2>DOs.</h2>
+            <div class="rules-list">${rules.dos.map(r => `
+              <div class="rules-item"><div class="rules-icon">\u2713</div><p>${r}</p></div>`).join('')}
+            </div>
+          </div></div>
+          <div class="rules-col rules-dont"><div class="rules-col-inner reveal">
+            <h2>DON'Ts.</h2>
+            <div class="rules-list">${rules.donts.map(r => `
+              <div class="rules-item"><div class="rules-icon">\u2717</div><p>${r}</p></div>`).join('')}
+            </div>
+          </div></div>
+        </div>`;
+    }
+
+    function renderExamples(examples) {
+      const delays = ['', ' d1', ' d2'];
+      document.getElementById('exSection').innerHTML = `
+        <div class="label reveal">In Practice</div>
+        <h2 class="heading reveal d1">Real <em>examples.</em></h2>
+        <p class="subtext reveal d2">How SAs have been engaged across different deal scenarios.</p>
+        <div class="ex-grid">${examples.map((e, i) => `
+          <div class="ex-card reveal${delays[i] || ''}">
+            <div class="ex-tags">${e.tags.map(t => `<span class="ex-tag">${t}</span>`).join('')}</div>
+            <div class="ex-body"><h3>${e.title}</h3><p>${e.description}</p></div>
+          </div>`).join('')}
+        </div>`;
+    }
+
+    function renderResources(resources) {
+      const delays = ['', ' d1', ' d2'];
+      document.getElementById('resSection').innerHTML = `
+        <div class="label reveal">Tools &amp; Assets</div>
+        <h2 class="heading reveal d1">SA-curated <em>resources.</em></h2>
+        <p class="subtext reveal d2">Resources built and maintained by the SA team for the broader sales org.</p>
+        <div class="res-grid">${resources.map((r, i) => `
+          <a href="${r.url}" target="_blank" class="res-card reveal${delays[i] || ''}">
+            <div class="res-icon">${r.icon}</div>
+            <h3>${r.title}</h3>
+            <p>${r.description}</p>
+            <span class="res-link">${r.linkText} \u2192</span>
+          </a>`).join('')}
+        </div>`;
+    }
+
+    function personClick(name) {
+      return window._profiles[name]
+        ? ` has-profile" data-profile="` + name + `">`
+        : `">`;
+    }
+
+    function slackBtn(slackId, name) {
+      if (!slackId) return '';
+      return `<a class="card-slack" href="https://slack.com/app_redirect?channel=${slackId}" target="_blank" rel="noopener" title="Message ${name} on Slack" onclick="event.stopPropagation()">
+        <svg viewBox="0 0 122.8 122.8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#E01E5A" d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9zm6.5 0c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V77.6z"/>
+          <path fill="#36C5F0" d="M45.2 25.8c-7.1 0-12.9-5.8-12.9-12.9S38.1 0 45.2 0s12.9 5.8 12.9 12.9v12.9H45.2zm0 6.5c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H12.9C5.8 58.1 0 52.3 0 45.2s5.8-12.9 12.9-12.9h32.3z"/>
+          <path fill="#2EB67D" d="M97 45.2c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9-5.8 12.9-12.9 12.9H97V45.2zm-6.5 0c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V12.9C64.7 5.8 70.5 0 77.6 0s12.9 5.8 12.9 12.9v32.3z"/>
+          <path fill="#ECB22E" d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-12.9-5.8-12.9-12.9V97h12.9zm0-6.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z"/>
+        </svg>
+      </a>`;
+    }
+
+    function renderTeam(leadership, team) {
+      const delays = ['', ' d1', ' d2', ' d3', ' d4', ' d4'];
+      document.getElementById('teamSection').innerHTML = `
+        <div class="label reveal">The Humans</div>
+        <h2 class="heading reveal d1">Meet the <em>team.</em></h2>
+        <p class="subtext reveal d2">Enterprise Solutions Architects spanning NORAM and EMEA, covering every major technical discipline.</p>
+
+        <div class="team-region-label reveal">Leadership</div>
+        <div class="lead-grid">${leadership.map((l, i) => `
+          <div class="lead-card reveal${delays[i] || ''}${personClick(l.name)}
+            ${slackBtn(l.slackId, l.name)}
+            <img class="lead-photo" src="${l.photo}" alt="${l.name}">
+            <div>
+              <div class="lead-name">${l.name}</div>
+              <div class="lead-title">${l.title}</div>
+              <div class="lead-region">${l.location}</div>
+              <span class="lead-badge">${l.badge}</span>
+            </div>
+          </div>`).join('')}
+        </div>
+
+        ${Object.entries(team).map(([region, members]) => `
+          <div class="team-region-label reveal">${region.toUpperCase()}</div>
+          <div class="team-grid">${members.map((m, i) => `
+            <div class="team-card reveal${delays[i] || ''}${personClick(m.name)}
+              ${slackBtn(m.slackId, m.name)}
+              <img class="team-photo" src="${m.photo}" alt="${m.name}">
+              <div>
+                <div class="team-name">${m.name}</div>
+                <div class="team-spec">${m.specialty || ''}</div>
+                <div class="team-tz">${m.location}</div>
+              </div>
+            </div>`).join('')}
+          </div>`).join('')}`;
+    }
+
+    // ── Animations (initialized after render) ──
+    function initAnimations() {
+      // Scroll reveal
+      const reveals = document.querySelectorAll('.reveal');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+      reveals.forEach(el => obs.observe(el));
+
+      // Count-up
+      function animateCount(el) {
+        const text = el.textContent.trim();
+        const match = text.match(/^([^\d]*)(\d+)([^\d]*)$/);
+        if (!match) return;
+        const prefix = match[1], target = parseInt(match[2]), suffix = match[3];
+        const duration = 1200, start = performance.now();
+        el.textContent = prefix + '0' + suffix;
+        function tick(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = prefix + Math.round(target * eased) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+      const statNums = document.querySelectorAll('.stat-num');
+      const statObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && !e.target.dataset.counted) {
+            e.target.dataset.counted = 'true';
+            animateCount(e.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      statNums.forEach(el => statObs.observe(el));
+
+      // Profile click delegation
+      document.querySelectorAll('[data-profile]').forEach(el => {
+        el.addEventListener('click', () => openProfile(el.dataset.profile));
+      });
+    }
+
+    // ── Profile modal ──
+    function openProfile(name) {
+      const p = window._profiles[name];
+      if (!p) return;
+      let tenure = '';
+      let sinceYear = '';
+      if (p.startDate) {
+        const start = new Date(p.startDate);
+        const now = new Date();
+        let months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+        if (now.getDate() < start.getDate()) months -= 1;
+        if (months < 0) months = 0;
+        const y = Math.floor(months / 12);
+        const m = months % 12;
+        const yStr = y ? y + 'yr' : '';
+        const mStr = m ? m + 'mo' : '';
+        tenure = [yStr, mStr].filter(Boolean).join(' ') || '0mo';
+        sinceYear = start.getFullYear();
+      }
+
+      document.getElementById('profileContent').innerHTML = `
+        <div class="profile-header">
+          <img class="profile-photo" src="${p.photo}" alt="${p.name}">
+          <div>
+            <div class="profile-name">${p.name}</div>
+            <div class="profile-title">${p.title || ''}</div>
+            <div class="profile-meta">
+              ${p.specialty ? p.specialty + '<br>' : ''}
+              ${p.location || ''}
+              ${sinceYear ? '<br>At Shopify since ' + sinceYear + ' (' + tenure + ')' : ''}
+            </div>
+          </div>
+        </div>
+
+        ${p.career && p.career.length ? `
+          <div class="profile-section-label">Career</div>
+          <div class="profile-career">
+            ${p.career.map((c, i) => `
+              <div class="profile-career-item">
+                <div class="profile-career-dot${i > 0 ? ' past' : ''}"></div>
+                <div>
+                  <div class="profile-career-role">${esc(c.role)}</div>
+                  <div class="profile-career-co">${esc(c.company)} \u00b7 ${esc(c.period)}</div>
+                  ${c.description ? '<div class="profile-career-desc">' + esc(c.description) + '</div>' : ''}
+                </div>
+              </div>`).join('')}
+          </div>` : ''}
+
+        ${p.skills && p.skills.length ? `
+          <div class="profile-section-label">Skills</div>
+          <div class="profile-skills">
+            ${p.skills.map(s => '<span class="profile-skill">' + esc(s) + '</span>').join('')}
+          </div>` : ''}
+
+        ${p.wins && p.wins.length ? `
+          <div class="profile-section-label">Notable Deal Wins</div>
+          <div class="profile-wins">
+            ${p.wins.map(w => {
+              const brandEl = (typeof w === 'string')
+                ? esc(w)
+                : (w.url ? `<a href="${esc(w.url)}" target="_blank" rel="noopener" style="color:var(--green)">${esc(w.brand)} ↗</a>` : esc(w.brand));
+              const tags = (typeof w === 'object' && w.disciplines && w.disciplines.length)
+                ? `<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">${w.disciplines.map(d => `<span style="font-size:0.6rem;background:var(--green-bg);color:var(--white-muted);border-radius:3px;padding:1px 6px">${esc(d)}</span>`).join('')}</div>`
+                : '';
+              return `<div class="profile-win" style="display:flex;flex-direction:column">${brandEl}${tags}</div>`;
+            }).join('')}
+          </div>` : ''}
+
+        <div class="profile-contact">
+          ${p.slackId ? '<a href="https://slack.com/app_redirect?channel=' + p.slackId + '" target="_blank">💬 Message on Slack</a>' : ''}
+        </div>`;
+
+      document.getElementById('profileModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    document.getElementById('profileClose').addEventListener('click', closeProfile);
+    document.getElementById('profileModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeProfile();
+    });
+    function closeProfile() {
+      document.getElementById('profileModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── Video modal ──
+    function openVideoModal(src, steps) {
+      const modal = document.getElementById('videoModal');
+      const player = document.getElementById('videoModalPlayer');
+      const stepsEl = document.getElementById('videoModalSteps');
+      player.src = src;
+      stepsEl.innerHTML = (steps || []).map((s, i) => `
+        <div class="video-modal-step">
+          <div class="video-modal-step-num">${i + 1}</div>
+          <p>${s}</p>
+        </div>`).join('');
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    document.getElementById('videoModalClose').addEventListener('click', closeVideoModal);
+    document.getElementById('videoModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeVideoModal();
+    });
+    function closeVideoModal() {
+      const modal = document.getElementById('videoModal');
+      modal.classList.remove('open');
+      document.getElementById('videoModalPlayer').src = '';
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeVideoModal(); closeProfile(); closeEditPanel(); }
+    });
+
+    // ── Mobile nav ──
+    document.getElementById('navToggle').addEventListener('click', () =>
+      document.getElementById('navLinks').classList.toggle('open'));
+    document.getElementById('navLinks').querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+  </script>
+</body>
+</html>
