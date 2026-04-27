@@ -6,6 +6,8 @@ A single-page internal site for the SA Enterprise Large team at Shopify. Built f
 
 **Live:** `sa-entral.quick.shopify.io`
 
+---
+
 ## What is this?
 
 SA-entral is the canonical reference for how SEs, AEs, and the broader sales org should engage Solutions Architects. It covers:
@@ -18,48 +20,61 @@ SA-entral is the canonical reference for how SEs, AEs, and the broader sales org
 - **Real examples** — scenario-based engagement patterns
 - **Resources** — Architecture Diagram Library, SA Call Coaches, Solutions Architect Hub
 
+---
+
 ## File Structure
 
 ```
-sa-entral-quick-site/
-  index.html    ← Site template (HTML + CSS + JS, renders from data.json)
-  data.json     ← All site content (team, disciplines, rules, resources, etc.)
-  README.md     ← This file
+sa-entral/
+  index.html          ← Site (HTML + CSS + JS, renders from quick.db)
+  request-sa-sf.mp4   ← Walkthrough video for Salesforce case request
+  AGENTS.md           ← Quick platform API reference
+  README.md           ← This file
 ```
 
-## Updating Content
+---
 
-All content lives in `data.json`. To update the site, edit the JSON — no HTML changes needed.
+## Data
 
-**Add a team member:**
-```json
-// In team.noram or team.emea array:
-{ "name": "New Person", "specialty": "Storefronts", "photo": "https://cdn.shopify.com/...", "location": "US · PT (Pacific)" }
-```
+All content lives in **quick.db** (two collections):
 
-**Add a discipline:**
-```json
-// In disciplines array:
-{ "icon": "🔮", "name": "New Discipline", "description": "...", "members": [...] }
-```
+- **`site_config`** — one document with hero, stats, disciplines, rules, resources, etc.
+- **`people`** — one document per SA with profile data (career, skills, notable deal wins)
 
-**Update stats, resources, examples, rules** — same pattern, edit the relevant JSON key.
+There is no `data.json` — the site fetches everything from quick.db on load.
+
+---
+
+## Profile Editing
+
+Each SA can edit their own resume brief directly on the site:
+
+- **Identity** — Quick automatically identifies users via their Shopify Google login
+- **Editable fields** — Career history, Skills, Notable Deal Wins (brand + URL + discipline tags)
+- **Access** — SAs can only edit their own profile
+- **Admin access** — Neilson Flemming and Will Clack can edit any team member's profile via a person-picker dropdown
+
+The **✏️ Edit My Profile** button appears in the nav for anyone on the SA roster.
+
+---
 
 ## Deployment
 
-### Quick CLI
 ```bash
-npm i -g @shopify/quick
 quick deploy . sa-entral
 ```
 
-## Design
+Confirm overwrite when prompted.
 
-- Shopify green (`#00C853`) accent on near-black (`#0B0F0D`)
-- CSS grid background pattern, scroll-reveal animations, count-up stats
-- Fully responsive (laptop + mobile)
-- Zero dependencies — vanilla HTML/CSS/JS, no build step
+### Local preview
 
+```bash
+quick serve
+```
+
+> Note: `quick.db` and `quick.id` are only available when deployed to Quick or running via `quick serve`. The site will not load data from a plain file server.
+
+---
 
 ## Team
 
