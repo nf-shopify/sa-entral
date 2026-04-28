@@ -799,6 +799,23 @@
     // ── Identity & edit access ──
     const ADMIN_SLACK_IDS = ['U03L3D490F9', 'U09H7GYPVRV'];
 
+    // Current Vault photo URLs — update this table when someone changes their photo
+    const VAULT_PHOTOS = {
+      'U03L3D490F9': 'https://cdn.shopify.com/b/u2-files-production-bucket/7qqdl01rs74nhyjqhrlq3bbgzt6n.webp',
+      'U09H7GYPVRV': 'https://cdn.shopify.com/b/u2-files-production-bucket/v317az3ul6sq43yu2cy6hmf9fivm.jpg',
+      'U09SSUZCK0R': 'https://cdn.shopify.com/b/u2-files-production-bucket/h2maii79chexf6i1um4t1xq7rf7i.jpg',
+      'U08J87BE9A9': 'https://cdn.shopify.com/b/u2-files-production-bucket/glthbs5a7guygutaxmrh3kjt4ix9.webp',
+      'U08J2TLJ58E': 'https://cdn.shopify.com/b/u2-files-production-bucket/no8f1dp15fr9mb24sk2axzcy740t.webp',
+      'U05APCQ6EFK': 'https://cdn.shopify.com/b/u2-files-production-bucket/jc0knvvr8m66fa1ndf6vuaspojj1.webp',
+      'U099LU9R4EA': 'https://cdn.shopify.com/b/u2-files-production-bucket/bwdqqaw4bh9kiv6jznuv6blbg7z8.webp',
+      'U09GJEFGBE2': 'https://cdn.shopify.com/b/u2-files-production-bucket/pn38m8zpetj2ib8v81uajf2pmg64.jpg',
+      'W018GA4N361': 'https://cdn.shopify.com/b/u2-files-production-bucket/plvemmt3hjwpyag2b2u920fagz3a.webp',
+      'W0197GH2D4Y': 'https://cdn.shopify.com/b/u2-files-production-bucket/j5ohl6t32red3a6rbxjonzbmkc0f.webp',
+      'U08HABDQEAE': 'https://cdn.shopify.com/b/u2-files-production-bucket/pnpnhqtfph1eo5iyzkfuvk9z79ws.webp',
+      'U09BLDEFM9V': 'https://cdn.shopify.com/b/u2-files-production-bucket/x2f8vud8hjwdzrj51dqietwbw1l1.webp',
+      'U0AHY4SHMA6': 'https://cdn.shopify.com/b/u2-files-production-bucket/0axdjyvyco3s9ufsklnmz4i2bmgc.png'
+    };
+
     async function initIdentity(allPeople) {
       try {
         const user = await quick.id.waitForUser();
@@ -810,6 +827,34 @@
       } catch (e) {
         // Not on Quick or identity unavailable — edit button stays hidden
       }
+    }
+
+    async function syncPhotos() {
+      const btn = document.getElementById('syncPhotosBtn');
+      const status = document.getElementById('syncPhotosStatus');
+      btn.disabled = true;
+      btn.textContent = '↻ Syncing…';
+      const people = window._allPeople || [];
+      let updated = 0;
+      for (const person of people) {
+        const vaultUrl = VAULT_PHOTOS[person.slackId];
+        if (vaultUrl && person.photo !== vaultUrl) {
+          await quick.db.collection('people').update(person.id, { photo: vaultUrl });
+          person.photo = vaultUrl;
+          // Update visible avatar if this person is currently being edited
+          if (window._editTarget && window._editTarget.slackId === person.slackId) {
+            document.getElementById('editHeaderPhoto').src = vaultUrl;
+          }
+          updated++;
+        }
+      }
+      btn.disabled = false;
+      btn.textContent = '↻ Sync Photos from Vault';
+      status.textContent = updated > 0 ? `✓ Updated ${updated} photo${updated > 1 ? 's' : ''}` : '✓ All photos up to date';
+      if (updated > 0) renderTeam(
+        people.filter(p => p.region === 'leadership').sort((a,b) => ['NORAM Lead','EMEA Lead'].indexOf(a.badge) - ['NORAM Lead','EMEA Lead'].indexOf(b.badge)),
+        { noram: people.filter(p => p.region === 'noram'), emea: people.filter(p => p.region === 'emea') }
+      );
     }
 
     function esc(s) {
@@ -834,7 +879,9 @@
           .join('');
         pickerEl.innerHTML = `
           <div class="edit-admin-label">Editing profile for</div>
-          <select class="edit-admin-select" id="editPersonSelect">${options}</select>`;
+          <select class="edit-admin-select" id="editPersonSelect">${options}</select>
+          <button class="edit-add-btn" id="syncPhotosBtn" style="margin-top:10px;align-self:flex-start" onclick="syncPhotos()">↻ Sync Photos from Vault</button>
+          <div id="syncPhotosStatus" style="font-size:0.62rem;color:var(--white-muted);margin-top:4px"></div>`;
         document.getElementById('editPersonSelect').addEventListener('change', e => {
           const target = (window._allPeople || []).find(person => person.id === e.target.value);
           if (!target) return;
