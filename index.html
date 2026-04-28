@@ -892,6 +892,8 @@
           const disciplines = [...document.querySelectorAll('#disciplinesPicker .disc-tag.active')]
             .map(t => t.dataset.discipline);
           saveCurrentUser({ disciplines });
+          const specEl = document.querySelector(`[data-person-spec="${window._editTarget.slackId}"]`);
+          if (specEl) specEl.textContent = disciplines.join(' · ');
         });
       });
     }
@@ -1300,7 +1302,7 @@
               <img class="team-photo" src="${m.photo}" alt="${m.name}">
               <div>
                 <div class="team-name">${m.name}</div>
-                <div class="team-spec">${m.specialty || ''}</div>
+                <div class="team-spec" data-person-spec="${m.slackId}">${(m.disciplines && m.disciplines.length) ? m.disciplines.join(' · ') : (m.specialty || '')}</div>
                 <div class="team-tz">${m.location}</div>
               </div>
             </div>`).join('')}
