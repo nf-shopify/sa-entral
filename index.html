@@ -360,10 +360,16 @@
       padding: 4px 12px; border-radius: 100px; font-size: 0.65rem; font-weight: 600;
       background: var(--green-bg2); color: var(--green); border: 1px solid var(--border);
     }
-    .profile-wins { display: flex; flex-direction: column; gap: 8px; }
-    .profile-win {
-      font-size: 0.8rem; color: var(--white-dim); line-height: 1.5;
-    }
+    .profile-wins { display: flex; flex-direction: column; gap: 10px; }
+    .profile-win { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 5px; transition: border-color 0.2s; }
+    .profile-win:hover { border-color: var(--border-hover); }
+    .profile-win-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .profile-win-brand { font-size: 0.82rem; font-weight: 700; color: var(--white); }
+    .profile-win-link { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; color: var(--green); font-weight: 600; text-decoration: none; flex-shrink: 0; }
+    .profile-win-link:hover { opacity: 0.8; }
+    .profile-win-link svg { width: 11px; height: 11px; }
+    .profile-win-desc { font-size: 0.72rem; color: var(--white-muted); line-height: 1.5; }
+    .profile-win-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
     .profile-contact {
       display: flex; gap: 10px; margin-top: 24px; padding-top: 16px;
       border-top: 1px solid var(--border); justify-content: center;
@@ -1014,8 +1020,9 @@
       const cards = (p.wins || []).map((w, i) => `
         <div class="edit-win-card">
           <div class="edit-win-body">
-            <div class="edit-win-brand">${w.url ? `<a href="${esc(w.url)}" target="_blank" rel="noopener">${esc(w.brand)} ↗</a>` : esc(w.brand)}</div>
-            <div class="edit-win-tags">${(w.disciplines || []).map(d => `<span class="edit-win-tag">${esc(d)}</span>`).join('')}</div>
+            <div class="edit-win-brand">${w.url ? `<a href="${esc(w.url)}" target="_blank" rel="noopener">${esc(w.brand)}</a>` : esc(w.brand)}</div>
+            ${w.description ? `<div style="font-size:0.68rem;color:var(--white-muted);margin-top:2px">${esc(w.description)}</div>` : ''}
+            <div class="edit-win-tags" style="margin-top:4px">${(w.disciplines || []).map(d => `<span class="edit-win-tag">${esc(d)}</span>`).join('')}</div>
           </div>
           <button class="edit-remove" data-remove-win="${i}" title="Remove">✕</button>
         </div>`).join('');
@@ -1037,6 +1044,7 @@
           <div class="edit-add-form">
             <input class="edit-input" id="winBrand" placeholder="Brand name">
             <input class="edit-input" id="winUrl" placeholder="Website URL (e.g. gymshark.com)">
+            <input class="edit-input" id="winDesc" placeholder="Short description (e.g. Headless replatform · $2M ARR)">
             <div class="edit-section-label" style="margin-top:6px;margin-bottom:4px">Disciplines</div>
             <div class="disc-picker" id="discPicker">${pickerTags}</div>
             <div class="disc-custom-row">
@@ -1108,10 +1116,11 @@
       document.getElementById('winAddBtn').addEventListener('click', async () => {
         const brand = document.getElementById('winBrand').value.trim();
         const rawUrl = document.getElementById('winUrl').value.trim();
+        const description = document.getElementById('winDesc').value.trim();
         if (!brand) return;
         const url = rawUrl && !rawUrl.startsWith('http') ? 'https://' + rawUrl : rawUrl;
-        const disciplines = [...document.querySelectorAll('.disc-tag.active')].map(t => t.dataset.disc);
-        const wins = [...(window._editTarget.wins || []), { brand, url, disciplines }];
+        const disciplines = [...document.querySelectorAll('#discPicker .disc-tag.active')].map(t => t.dataset.disc);
+        const wins = [...(window._editTarget.wins || []), { brand, url, description, disciplines }];
         await saveCurrentUser({ wins });
         renderEditBody();
       });
@@ -1421,13 +1430,21 @@
           <div class="profile-section-label">Notable Deal Wins</div>
           <div class="profile-wins">
             ${p.wins.map(w => {
-              const brandEl = (typeof w === 'string')
-                ? esc(w)
-                : (w.url ? `<a href="${esc(w.url)}" target="_blank" rel="noopener" style="color:var(--green)">${esc(w.brand)} ↗</a>` : esc(w.brand));
-              const tags = (typeof w === 'object' && w.disciplines && w.disciplines.length)
-                ? `<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">${w.disciplines.map(d => `<span style="font-size:0.6rem;background:var(--green-bg);color:var(--white-muted);border-radius:3px;padding:1px 6px">${esc(d)}</span>`).join('')}</div>`
+              if (typeof w === 'string') return `<div class="profile-win"><div class="profile-win-brand">${esc(w)}</div></div>`;
+              const linkEl = w.url
+                ? `<a class="profile-win-link" href="${esc(w.url)}" target="_blank" rel="noopener"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 2H2a1 1 0 00-1 1v7a1 1 0 001 1h7a1 1 0 001-1V7M8 1h3m0 0v3m0-3L5 7"/></svg> Visit</a>`
                 : '';
-              return `<div class="profile-win" style="display:flex;flex-direction:column">${brandEl}${tags}</div>`;
+              const desc = w.description ? `<div class="profile-win-desc">${esc(w.description)}</div>` : '';
+              const tags = (w.disciplines && w.disciplines.length)
+                ? `<div class="profile-win-tags">${w.disciplines.map(d => `<span style="font-size:0.58rem;background:var(--green-bg);color:var(--white-muted);border-radius:3px;padding:1px 6px">${esc(d)}</span>`).join('')}</div>`
+                : '';
+              return `<div class="profile-win">
+                <div class="profile-win-header">
+                  <div class="profile-win-brand">${esc(w.brand)}</div>
+                  ${linkEl}
+                </div>
+                ${desc}${tags}
+              </div>`;
             }).join('')}
           </div>` : ''}
 
