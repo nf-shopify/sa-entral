@@ -751,18 +751,23 @@
         });
 
         // Derive disciplines for people who don't have an explicit disciplines array yet
+        // Also normalize any legacy discipline names (e.g. "Retail" → "Retail / POS")
+        const normDisc = d => DISCIPLINE_ALIASES[d] || d;
         allPeople.forEach(p => {
           if (!p.disciplines) {
             p.disciplines = config.disciplines
               .filter(d => (d.memberSlackIds || []).includes(p.slackId))
-              .map(d => d.name);
+              .map(d => normDisc(d.name));
+          } else {
+            p.disciplines = p.disciplines.map(normDisc);
           }
         });
 
-        // Resolve discipline members from person.disciplines (person-owned)
+        // Normalize discipline names in site_config and resolve members from person.disciplines
         config.disciplines = config.disciplines.map(d => ({
           ...d,
-          members: allPeople.filter(p => (p.disciplines || []).includes(d.name))
+          name: normDisc(d.name),
+          members: allPeople.filter(p => (p.disciplines || []).includes(normDisc(d.name)))
         }));
 
         document.title = 'SA-entral | Enterprise Solutions Architects';
@@ -997,7 +1002,8 @@
     }
 
     // ── Notable Deal Wins ──
-    const PRESET_DISCIPLINES = ['Storefronts','Checkout & Extensibility','Retail','Payments','Security & Infrastructure','AI'];
+    const PRESET_DISCIPLINES = ['Storefronts','Checkout & Extensibility','Retail / POS','Payments','Security & Infrastructure','AI'];
+    const DISCIPLINE_ALIASES = { 'Retail': 'Retail / POS' };
 
     function getCustomDisciplines() {
       const all = (window._editTarget.wins || []).flatMap(w => w.disciplines || []);

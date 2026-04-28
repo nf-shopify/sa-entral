@@ -58,7 +58,7 @@ There is no `data.json` — the site fetches everything from quick.db on load.
   "disciplines": ["Storefronts", "AI"],
   "career": [{ "role": "...", "company": "...", "period": "..." }],
   "skills": ["Enterprise Architecture", "Claude / AI"],
-  "wins": [{ "brand": "Gymshark", "url": "https://gymshark.com", "disciplines": ["Retail"] }]
+  "wins": [{ "brand": "Gymshark", "url": "https://gymshark.com", "disciplines": ["Retail / POS"] }]
 }
 ```
 
@@ -72,7 +72,7 @@ Each SA can edit their own resume brief directly on the site — no admin bottle
 
 | Field | Description |
 |-------|-------------|
-| **Disciplines** | Which of the 6 SA disciplines they belong to (multi-select). Appears on the discipline cards and in their profile. |
+| **Disciplines** | Which of the 6 SA disciplines they belong to (multi-select): Storefronts, Checkout & Extensibility, Retail / POS, Payments, Security & Infrastructure, AI. Appears on discipline cards and their profile. |
 | **Career** | Job history — role, company, period. Add or remove entries. |
 | **Skills** | Free-text skill tags. Add or remove. |
 | **Notable Deal Wins** | Brand name + website URL + discipline tags. Supports custom discipline tags beyond the 6 presets. |
