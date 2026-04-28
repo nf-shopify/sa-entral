@@ -72,7 +72,7 @@ Each SA can edit their own resume brief directly on the site — no admin bottle
 
 | Field | Description |
 |-------|-------------|
-| **Disciplines** | Which of the 6 SA disciplines they belong to (multi-select). Updates the discipline cards on the page live. |
+| **Disciplines** | Which of the 6 SA disciplines they belong to (multi-select). Appears on the discipline cards and in their profile. |
 | **Career** | Job history — role, company, period. Add or remove entries. |
 | **Skills** | Free-text skill tags. Add or remove. |
 | **Notable Deal Wins** | Brand name + website URL + discipline tags. Supports custom discipline tags beyond the 6 presets. |
