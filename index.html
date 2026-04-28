@@ -723,8 +723,9 @@
           quick.db.collection('people').find()
         ]);
 
-        // Store globally for admin panel use
+        // Store globally for admin panel and live discipline re-render
         window._allPeople = allPeople;
+        window._siteConfig = config;
 
         // Build leadership / team shape — NORAM Lead always first
         const LEADERSHIP_ORDER = ['NORAM Lead', 'EMEA Lead'];
@@ -749,10 +750,19 @@
           }
         });
 
-        // Resolve discipline member references from slackId lists to person objects
+        // Derive disciplines for people who don't have an explicit disciplines array yet
+        allPeople.forEach(p => {
+          if (!p.disciplines) {
+            p.disciplines = config.disciplines
+              .filter(d => (d.memberSlackIds || []).includes(p.slackId))
+              .map(d => d.name);
+          }
+        });
+
+        // Resolve discipline members from person.disciplines (person-owned)
         config.disciplines = config.disciplines.map(d => ({
           ...d,
-          members: (d.memberSlackIds || []).map(id => allPeople.find(p => p.slackId === id)).filter(Boolean)
+          members: allPeople.filter(p => (p.disciplines || []).includes(d.name))
         }));
 
         document.title = 'SA-entral | Enterprise Solutions Architects';
@@ -850,13 +860,50 @@
     function renderEditBody() {
       const p = window._editTarget;
       document.getElementById('editBody').innerHTML = `
+        ${renderDisciplinesEdit(p)}
         ${renderCareerEdit(p)}
         ${renderSkillsEdit(p)}
         ${renderWinsEdit(p)}
       `;
+      bindDisciplinesEvents();
       bindCareerEvents();
       bindSkillsEvents();
       bindWinsEvents();
+    }
+
+    // ── Disciplines ──
+    function renderDisciplinesEdit(p) {
+      const selected = p.disciplines || [];
+      const tags = PRESET_DISCIPLINES.map(d => `
+        <span class="disc-tag${selected.includes(d) ? ' active' : ''}" data-discipline="${esc(d)}">${esc(d)}</span>`
+      ).join('');
+      return `
+        <div>
+          <div class="edit-section-label">My Disciplines</div>
+          <p style="font-size:0.65rem;color:var(--white-muted);margin-bottom:8px">Select all that apply — you'll appear on each discipline card.</p>
+          <div class="disc-picker" id="disciplinesPicker">${tags}</div>
+        </div>`;
+    }
+
+    function bindDisciplinesEvents() {
+      document.querySelectorAll('#disciplinesPicker .disc-tag').forEach(tag => {
+        tag.addEventListener('click', async () => {
+          tag.classList.toggle('active');
+          const disciplines = [...document.querySelectorAll('#disciplinesPicker .disc-tag.active')]
+            .map(t => t.dataset.discipline);
+          await saveCurrentUser({ disciplines });
+          // Re-render discipline section on the page so it updates live
+          const allDiscs = (window._allPeople || []);
+          const discSection = document.getElementById('discSection');
+          if (discSection && window._siteConfig) {
+            const updated = window._siteConfig.disciplines.map(d => ({
+              ...d,
+              members: allDiscs.filter(p => (p.disciplines || []).includes(d.name))
+            }));
+            renderDisciplines(updated);
+          }
+        });
+      });
     }
 
     // ── Career ──
@@ -1116,7 +1163,7 @@
             <span class="emoji">${d.icon}</span>
             <h3>${d.name}</h3>
             <p>${d.description}</p>
-            ${d.members.map((m, mi) => {
+            ${d.members.length ? d.members.map((m, mi) => {
               const clickable = window._profiles[m.name] ? ' has-profile" data-profile="' + m.name + '"' : '"';
               const styleAttr = mi > 0 ? ' style="border-top:none;padding-top:6px"' : '';
               const avatar = m.photo
@@ -1126,7 +1173,7 @@
                 ${avatar}
                 <div><div class="disc-sa-info">${m.name}</div><div class="disc-sa-tz">${m.location}</div></div>
               </div>`;
-            }).join('')}
+            }).join('') : '<div class="disc-sa"><div class="disc-avatar" style="opacity:0.4">?</div><div><div class="disc-sa-info" style="opacity:0.4">TBD</div><div class="disc-sa-tz" style="opacity:0.4">Hiring</div></div></div>'}
           </div>`).join('')}
         </div>`;
     }
@@ -1345,6 +1392,12 @@
             </div>
           </div>
         </div>
+
+        ${p.disciplines && p.disciplines.length ? `
+          <div class="profile-section-label">Disciplines</div>
+          <div class="profile-skills">
+            ${p.disciplines.map(d => '<span class="profile-skill">' + esc(d) + '</span>').join('')}
+          </div>` : ''}
 
         ${p.career && p.career.length ? `
           <div class="profile-section-label">Career</div>
