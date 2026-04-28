@@ -1052,14 +1052,14 @@
         });
       });
 
-      document.querySelectorAll('.disc-tag').forEach(tag => {
+      document.querySelectorAll('#discPicker .disc-tag').forEach(tag => {
         tag.addEventListener('click', e => {
           if (e.target.classList.contains('disc-tag-remove')) return;
           tag.classList.toggle('active');
         });
       });
 
-      document.querySelectorAll('[data-remove-disc]').forEach(btn => {
+      document.querySelectorAll('#discPicker [data-remove-disc]').forEach(btn => {
         btn.addEventListener('click', async e => {
           e.stopPropagation();
           const disc = btn.dataset.removeDisc;
