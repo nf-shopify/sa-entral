@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SA-entral Photo Update</title>
+  <script src="/client/quick.js"></script>
+  <style>
+    body { font-family: monospace; background: #0b0f0d; color: #e8ede9; padding: 32px; }
+    pre { background: #0f1a14; padding: 16px; border-radius: 8px; font-size: 0.8rem; overflow: auto; }
+    button { background: #00C853; color: #000; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1rem; cursor: pointer; margin: 16px 0; }
+    button:disabled { opacity: 0.5; cursor: default; }
+  </style>
+</head>
+<body>
+  <h2>SA-entral — Photo Update</h2>
+  <p>Updates team member photos to current Vault URLs. Safe to re-run.</p>
+  <button onclick="run()">Run Update</button>
+  <pre id="log">Ready.</pre>
+
+  <script>
+  const log = msg => { document.getElementById('log').textContent += '\n' + msg; };
+
+  const PHOTO_UPDATES = {
+    'U0AHY4SHMA6': 'https://cdn.shopify.com/b/u2-files-production-bucket/0axdjyvyco3s9ufsklnmz4i2bmgc.png'
+  };
+
+  async function run() {
+    document.querySelector('button').disabled = true;
+    log('Fetching people collection...');
+    try {
+      const people = await quick.db.collection('people').find();
+      log(`Found ${people.length} people.`);
+
+      for (const [slackId, newPhoto] of Object.entries(PHOTO_UPDATES)) {
+        const person = people.find(p => p.slackId === slackId);
+        if (!person) { log(`⚠️  No person found with slackId ${slackId}`); continue; }
+        if (person.photo === newPhoto) { log(`✓ ${person.name} — photo already up to date`); continue; }
+        log(`Updating ${person.name}...`);
+        log(`  Old: ${person.photo}`);
+        log(`  New: ${newPhoto}`);
+        await quick.db.collection('people').update(person.id, { photo: newPhoto });
+        log(`✓ ${person.name} — updated`);
+      }
+
+      log('\n🎉 Done! Delete this page and redeploy.');
+    } catch (err) {
+      log('❌ Error: ' + err.message);
+      document.querySelector('button').disabled = false;
+    }
+  }
+  </script>
+</body>
+</html>

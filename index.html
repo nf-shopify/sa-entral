@@ -911,13 +911,22 @@
 
     // ── Career ──
     function sortCareer(career) {
-      return [...career].sort((a, b) => careerEndYear(b.period) - careerEndYear(a.period));
+      return [...career].sort((a, b) => {
+        const endDiff = careerEndYear(b.period) - careerEndYear(a.period);
+        if (endDiff !== 0) return endDiff;
+        return careerStartYear(b.period) - careerStartYear(a.period);
+      });
     }
     function careerEndYear(period) {
       if (!period) return 0;
       if (/present|current/i.test(period)) return 9999;
       const years = period.match(/\d{4}/g);
       return years ? parseInt(years[years.length - 1]) : 0;
+    }
+    function careerStartYear(period) {
+      if (!period) return 0;
+      const years = period.match(/\d{4}/g);
+      return years ? parseInt(years[0]) : 0;
     }
 
     function renderCareerEdit(p) {
