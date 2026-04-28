@@ -910,6 +910,16 @@
     }
 
     // ── Career ──
+    function sortCareer(career) {
+      return [...career].sort((a, b) => careerEndYear(b.period) - careerEndYear(a.period));
+    }
+    function careerEndYear(period) {
+      if (!period) return 0;
+      if (/present|current/i.test(period)) return 9999;
+      const years = period.match(/\d{4}/g);
+      return years ? parseInt(years[years.length - 1]) : 0;
+    }
+
     function renderCareerEdit(p) {
       const cards = (p.career || []).map((c, i) => `
         <div class="edit-card" data-career-index="${i}">
@@ -951,7 +961,7 @@
         const company = document.getElementById('careerCompany').value.trim();
         const period  = document.getElementById('careerPeriod').value.trim();
         if (!role || !company) return;
-        const career = [{ role, company, period }, ...(window._editTarget.career || [])];
+        const career = sortCareer([{ role, company, period }, ...(window._editTarget.career || [])]);
         await saveCurrentUser({ career });
         renderEditBody();
       });
