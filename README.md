@@ -39,20 +39,50 @@ sa-entral/
 All content lives in **quick.db** (two collections):
 
 - **`site_config`** — one document with hero, stats, disciplines, rules, resources, etc.
-- **`people`** — one document per SA with profile data (career, skills, notable deal wins)
+- **`people`** — one document per SA with full profile data
 
 There is no `data.json` — the site fetches everything from quick.db on load.
+
+### People document shape
+
+```json
+{
+  "slackId": "U03L3D490F9",
+  "name": "Neilson Flemming",
+  "title": "Manager, SA Enterprise Large",
+  "photo": "https://cdn.shopify.com/...",
+  "location": "US · ET (Eastern)",
+  "specialty": "SA Leadership · NORAM",
+  "region": "leadership",
+  "startDate": "2022-06-27",
+  "disciplines": ["Storefronts", "AI"],
+  "career": [{ "role": "...", "company": "...", "period": "..." }],
+  "skills": ["Enterprise Architecture", "Claude / AI"],
+  "wins": [{ "brand": "Gymshark", "url": "https://gymshark.com", "disciplines": ["Retail"] }]
+}
+```
 
 ---
 
 ## Profile Editing
 
-Each SA can edit their own resume brief directly on the site:
+Each SA can edit their own resume brief directly on the site — no admin bottleneck. Quick automatically identifies users via their Shopify Google login.
 
-- **Identity** — Quick automatically identifies users via their Shopify Google login
-- **Editable fields** — Career history, Skills, Notable Deal Wins (brand + URL + discipline tags)
-- **Access** — SAs can only edit their own profile
-- **Admin access** — Neilson Flemming and Will Clack can edit any team member's profile via a person-picker dropdown
+### Editable fields
+
+| Field | Description |
+|-------|-------------|
+| **Disciplines** | Which of the 6 SA disciplines they belong to (multi-select). Updates the discipline cards on the page live. |
+| **Career** | Job history — role, company, period. Add or remove entries. |
+| **Skills** | Free-text skill tags. Add or remove. |
+| **Notable Deal Wins** | Brand name + website URL + discipline tags. Supports custom discipline tags beyond the 6 presets. |
+
+All changes auto-save to quick.db immediately.
+
+### Access levels
+
+- **SAs** — can edit their own profile only
+- **Admins** (Neilson Flemming, Will Clack) — can edit any team member's profile via a person-picker dropdown in the edit panel
 
 The **✏️ Edit My Profile** button appears in the nav for anyone on the SA roster.
 
@@ -72,7 +102,7 @@ Confirm overwrite when prompted.
 quick serve
 ```
 
-> Note: `quick.db` and `quick.id` are only available when deployed to Quick or running via `quick serve`. The site will not load data from a plain file server.
+> Note: `quick.db` and `quick.id` are only available when deployed to Quick or running via `quick serve`.
 
 ---
 
